@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Typography,
   Box,
-  Grid,
   Card,
   CardContent,
   Avatar,
@@ -11,114 +10,113 @@ import {
   Button,
   Paper,
   Rating,
-  Divider,
-  IconButton,
-  Drawer,
   TextField,
   InputAdornment,
-  Alert
-} from '@mui/material';
+  Alert,
+  CircularProgress,
+} from "@mui/material";
 import {
   Chat,
   School,
-  Star,
-  Send,
-  Close,
   Search,
-  TrendingUp,
-  People,
-  QuestionAnswer
-} from '@mui/icons-material';
-import { useAuth } from '../../context/AuthContext';
+} from "@mui/icons-material";
+import { useAuth } from "../../context/AuthContext";
+import userService from "../../services/user.service";
+import resourcesService from "../../services/resources.service";
+import BecomeContributorModal from "../user/BecomeContributorModal";
+import ChatModal from "../common/ChatModal";
 
-// Dummy contributors data - will be replaced with real data later
-const dummyContributors = [
-  {
-    id: 1,
-    name: 'Abdur Rahman',
-    avatar: null,
-    resourceCount: 15,
-    specialties: ['Computer Science', 'Mathematics'],
-    rating: 4.8,
-    totalRatings: 24,
-    joinedDate: '2024-01-15',
-    bio: 'CS student passionate about algorithms and data structures. Always happy to help with programming concepts!'
-  },
-  {
-    id: 2,
-    name: 'Sarah Ahmed',
-    avatar: null,
-    resourceCount: 12,
-    specialties: ['Physics', 'Chemistry'],
-    rating: 4.9,
-    totalRatings: 18,
-    joinedDate: '2024-02-01',
-    bio: 'Science enthusiast with expertise in experimental physics and organic chemistry.'
-  },
-  {
-    id: 3,
-    name: 'Muhammad Ali',
-    avatar: null,
-    resourceCount: 8,
-    specialties: ['English Literature', 'History'],
-    rating: 4.7,
-    totalRatings: 15,
-    joinedDate: '2024-01-20',
-    bio: 'Literature lover and history buff. Great at helping with essays and research papers.'
-  },
-  {
-    id: 4,
-    name: 'Fatima Khan',
-    avatar: null,
-    resourceCount: 20,
-    specialties: ['Mathematics', 'Statistics'],
-    rating: 4.9,
-    totalRatings: 32,
-    joinedDate: '2023-12-10',
-    bio: 'Math tutor with 3+ years experience. Specializing in calculus, statistics, and problem-solving.'
-  },
-  {
-    id: 5,
-    name: 'Ahmed Hassan',
-    avatar: null,
-    resourceCount: 6,
-    specialties: ['Biology', 'Environmental Science'],
-    rating: 4.6,
-    totalRatings: 12,
-    joinedDate: '2024-02-15',
-    bio: 'Biology student focused on environmental conservation and sustainable development.'
-  },
-  {
-    id: 6,
-    name: 'Zara Malik',
-    avatar: null,
-    resourceCount: 11,
-    specialties: ['Economics', 'Business Studies'],
-    rating: 4.8,
-    totalRatings: 21,
-    joinedDate: '2024-01-05',
-    bio: 'Economics major with practical business experience. Love discussing market trends and financial concepts.'
-  }
-];
+
 
 const AskPage = () => {
   const { user } = useAuth();
   const [contributors, setContributors] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedContributor, setSelectedContributor] = useState(null);
   const [chatOpen, setChatOpen] = useState(false);
-  const [message, setMessage] = useState('');
+  const [becomeContributorOpen, setBecomeContributorOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isBecomingContributor, setIsBecomingContributor] = useState(false);
+  const [userRole, setUserRole] = useState("student");
+  const [canApplyForContributor, setCanApplyForContributor] = useState(false);
+  const [totalResources, setTotalResources] = useState(0);
 
   useEffect(() => {
-    // For now, use dummy data. Later this will fetch from Firebase
-    setContributors(dummyContributors);
-  }, []);
+    loadContributors(); // This will also trigger loadResourceCount
+    if (user) {
+      loadUserRole();
+    }
+  }, [user]);
 
-  const filteredContributors = contributors.filter(contributor =>
-    contributor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contributor.specialties.some(specialty => 
-      specialty.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+  const loadContributors = async () => {
+    setLoading(true);
+    try {
+      const result = await userService.getContributors();
+      if (result.success) {
+        setContributors(result.data);
+        // Load resource count after contributors are loaded (for fallback calculation)
+        setTimeout(() => loadResourceCount(), 100);
+      } else {
+        console.error("Error loading contributors:", result.message);
+        setContributors([]);
+      }
+    } catch (error) {
+      console.error("Error loading contributors:", error);
+      setContributors([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadResourceCount = async () => {
+    try {
+      console.log("Loading resources for stats...");
+      const result = await resourcesService.getResources();
+      console.log("Resources result:", result);
+      
+      if (result.success && result.data) {
+        console.log("Resources data:", result.data);
+        console.log("Resources count:", result.data.length);
+        setTotalResources(result.data.length);
+      } else {
+        console.error("Error loading resources:", result.message);
+        // Fallback: calculate from contributors' resource counts
+        const contributorResourceCount = contributors.reduce((sum, c) => sum + (c.resourceCount || 0), 0);
+        console.log("Using fallback contributor resource count:", contributorResourceCount);
+        setTotalResources(contributorResourceCount);
+      }
+    } catch (error) {
+      console.error("Error loading resources:", error);
+      // Fallback: calculate from contributors' resource counts
+      const contributorResourceCount = contributors.reduce((sum, c) => sum + (c.resourceCount || 0), 0);
+      console.log("Using fallback contributor resource count:", contributorResourceCount);
+      setTotalResources(contributorResourceCount);
+    }
+  };
+
+  const loadUserRole = async () => {
+    try {
+      const result = await userService.getUserProfile(user.uid);
+      if (result.success) {
+        setUserRole(result.data.role || "student");
+      }
+
+      // Check if user can apply for contributor
+      const eligibilityResult = await userService.canApplyForContributor(user.uid);
+      if (eligibilityResult.success) {
+        setCanApplyForContributor(eligibilityResult.canApply);
+      }
+    } catch (error) {
+      console.error("Error loading user role:", error);
+    }
+  };
+
+  const filteredContributors = contributors.filter(
+    (contributor) =>
+      contributor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contributor.specialties.some((specialty) =>
+        specialty.toLowerCase().includes(searchTerm.toLowerCase())
+      )
   );
 
   const handleStartChat = (contributor) => {
@@ -129,74 +127,191 @@ const AskPage = () => {
   const handleCloseChat = () => {
     setChatOpen(false);
     setSelectedContributor(null);
-    setMessage('');
   };
 
-  const handleSendMessage = () => {
-    // Placeholder for sending message
-    console.log('Sending message:', message, 'to:', selectedContributor?.name);
-    setMessage('');
+  const handleBecomeContributor = async (specialties, bio) => {
+    if (!user) return;
+
+    setIsBecomingContributor(true);
+    try {
+      const result = await userService.requestContributorRole(
+        user.uid,
+        specialties,
+        bio
+      );
+      if (result.success) {
+        setUserRole("pending_contributor");
+        alert(result.message || "Your contributor request has been submitted! An admin will review it soon.");
+      } else {
+        alert(result.message || "Failed to become a contributor");
+      }
+    } catch (error) {
+      console.error("Error becoming contributor:", error);
+      alert("Error becoming contributor");
+    } finally {
+      setIsBecomingContributor(false);
+    }
   };
 
   const getSpecialtyColor = (specialty) => {
     const colors = {
-      'Computer Science': 'primary',
-      'Mathematics': 'secondary',
-      'Physics': 'info',
-      'Chemistry': 'success',
-      'English Literature': 'warning',
-      'History': 'error',
-      'Statistics': 'secondary',
-      'Biology': 'success',
-      'Environmental Science': 'info',
-      'Economics': 'warning',
-      'Business Studies': 'primary'
+      "Computer Science": "primary",
+      Mathematics: "secondary",
+      Physics: "info",
+      Chemistry: "success",
+      "English Literature": "warning",
+      History: "error",
+      Statistics: "secondary",
+      Biology: "success",
+      "Environmental Science": "info",
+      Economics: "warning",
+      "Business Studies": "primary",
     };
-    return colors[specialty] || 'default';
+    return colors[specialty] || "default";
   };
 
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Hero Section */}
       <Box sx={{ mb: 6 }}>
-        <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+        <Box sx={{ textAlign: "center", mb: 4 }}>
+          <Typography
+            variant="h3"
+            gutterBottom
+            sx={{ fontWeight: "bold", color: "primary.main" }}
+          >
             Connect with Contributors
           </Typography>
-          <Typography variant="h6" color="text.secondary" sx={{ mb: 2, maxWidth: 600, mx: 'auto' }}>
-            Get help from experienced students and subject experts. Start a conversation and learn together!
+          <Typography
+            variant="h6"
+            color="text.secondary"
+            sx={{ mb: 2, maxWidth: 600, mx: "auto" }}
+          >
+            Get help from experienced students and subject experts. Start a
+            conversation and learn together!
           </Typography>
 
-          {/* Stats Text */}
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, mb: 3, flexWrap: 'wrap' }}>
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" color="primary.main" sx={{ fontWeight: 'bold' }}>
+          {/* Premium Stats Cards */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 3,
+              mb: 4,
+              flexWrap: "wrap",
+            }}
+          >
+            <Paper
+              elevation={3}
+              sx={{
+                p: 3,
+                textAlign: "center",
+                borderRadius: 3,
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                color: "white",
+                minWidth: 140,
+                transition: "transform 0.2s, box-shadow 0.2s",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: 6,
+                },
+              }}
+            >
+              <Typography
+                variant="h3"
+                sx={{ 
+                  fontWeight: "bold",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
                 {contributors.length}+
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography 
+                variant="body1" 
+                sx={{ 
+                  opacity: 0.9,
+                  fontWeight: 500,
+                }}
+              >
                 Contributors
               </Typography>
-            </Box>
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" color="success.main" sx={{ fontWeight: 'bold' }}>
-                {contributors.reduce((sum, c) => sum + c.resourceCount, 0)}+
+            </Paper>
+
+            <Paper
+              elevation={3}
+              sx={{
+                p: 3,
+                textAlign: "center",
+                borderRadius: 3,
+                background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+                color: "white",
+                minWidth: 140,
+                transition: "transform 0.2s, box-shadow 0.2s",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: 6,
+                },
+              }}
+            >
+              <Typography
+                variant="h3"
+                sx={{ 
+                  fontWeight: "bold",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
+                {totalResources}+
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography 
+                variant="body1" 
+                sx={{ 
+                  opacity: 0.9,
+                  fontWeight: 500,
+                }}
+              >
                 Resources
               </Typography>
-            </Box>
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" color="info.main" sx={{ fontWeight: 'bold' }}>
+            </Paper>
+
+            <Paper
+              elevation={3}
+              sx={{
+                p: 3,
+                textAlign: "center",
+                borderRadius: 3,
+                background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+                color: "white",
+                minWidth: 140,
+                transition: "transform 0.2s, box-shadow 0.2s",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: 6,
+                },
+              }}
+            >
+              <Typography
+                variant="h3"
+                sx={{ 
+                  fontWeight: "bold",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                }}
+              >
                 24/7
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography 
+                variant="body1" 
+                sx={{ 
+                  opacity: 0.9,
+                  fontWeight: 500,
+                }}
+              >
                 Available
               </Typography>
-            </Box>
+            </Paper>
           </Box>
-          
+
           {/* Search Bar */}
-          <Box sx={{ maxWidth: 500, mx: 'auto', mb: 4 }}>
+          <Box sx={{ maxWidth: 500, mx: "auto", mb: 4 }}>
             <TextField
               fullWidth
               placeholder="Search contributors by name or subject..."
@@ -210,10 +325,10 @@ const AskPage = () => {
                 ),
               }}
               sx={{
-                '& .MuiOutlinedInput-root': {
+                "& .MuiOutlinedInput-root": {
                   borderRadius: 3,
-                  bgcolor: 'background.paper'
-                }
+                  bgcolor: "background.paper",
+                },
               }}
             />
           </Box>
@@ -222,50 +337,125 @@ const AskPage = () => {
 
       {/* Contributors Grid */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, mb: 3 }}>
-          Featured Contributors
-        </Typography>
-        
-        {filteredContributors.length === 0 ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 3,
+          }}
+        >
+          <Typography variant="h5" sx={{ fontWeight: 600 }}>
+            Featured Contributors
+          </Typography>
+          {user && canApplyForContributor && (
+            <Button
+              variant="outlined"
+              onClick={() => setBecomeContributorOpen(true)}
+              sx={{ borderRadius: 2 }}
+            >
+              Become a Contributor
+            </Button>
+          )}
+          {user && userRole === "pending_contributor" && (
+            <Chip
+              label="Application Pending"
+              color="warning"
+              variant="outlined"
+              sx={{ borderRadius: 2 }}
+            />
+          )}
+          {user && userRole === "rejected_contributor" && (
+            <Chip
+              label="Application Rejected"
+              color="error"
+              variant="outlined"
+              sx={{ borderRadius: 2 }}
+            />
+          )}
+        </Box>
+
+        {loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+            <CircularProgress />
+            <Typography sx={{ ml: 2 }}>Loading contributors...</Typography>
+          </Box>
+        ) : contributors.length === 0 ? (
+          <Alert severity="info">
+            No contributors available yet. Be the first to become a contributor and help other students!
+          </Alert>
+        ) : filteredContributors.length === 0 ? (
           <Alert severity="info">
             No contributors found matching your search criteria.
           </Alert>
         ) : (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 2,
+              justifyContent: "center",
+            }}
+          >
             {filteredContributors.map((contributor) => (
-              <Card 
+              <Card
                 key={contributor.id}
-                sx={{ 
+                sx={{
                   width: 280,
                   height: 340,
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: 3
-                  }
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                  "&:hover": {
+                    transform: "translateY(-2px)",
+                    boxShadow: 3,
+                  },
                 }}
               >
-                <CardContent sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <CardContent
+                  sx={{
+                    p: 2,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
                   {/* Header */}
-                  <Box sx={{ textAlign: 'center', mb: 2 }}>
+                  <Box sx={{ textAlign: "center", mb: 2 }}>
                     <Avatar
                       src={contributor.avatar}
-                      sx={{ 
-                        width: 50, 
-                        height: 50, 
-                        mx: 'auto',
+                      sx={{
+                        width: 50,
+                        height: 50,
+                        mx: "auto",
                         mb: 1,
-                        bgcolor: 'primary.main',
-                        fontSize: '1.2rem'
+                        bgcolor: "primary.main",
+                        fontSize: "1.2rem",
                       }}
                     >
-                      {contributor.name.split(' ').map(n => n[0]).join('')}
+                      {contributor.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
                     </Avatar>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600, fontSize: '0.95rem' }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ fontWeight: 600, fontSize: "0.95rem" }}
+                    >
                       {contributor.name}
                     </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
-                      <Rating value={contributor.rating} precision={0.1} size="small" readOnly />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 0.5,
+                      }}
+                    >
+                      <Rating
+                        value={contributor.rating}
+                        precision={0.1}
+                        size="small"
+                        readOnly
+                      />
                       <Typography variant="caption" color="text.secondary">
                         ({contributor.totalRatings})
                       </Typography>
@@ -273,8 +463,24 @@ const AskPage = () => {
                   </Box>
 
                   {/* Specialties */}
-                  <Box sx={{ mb: 2, minHeight: 60, display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, justifyContent: 'center', maxWidth: '100%' }}>
+                  <Box
+                    sx={{
+                      mb: 2,
+                      minHeight: 60,
+                      display: "flex",
+                      alignItems: "flex-start",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 0.5,
+                        justifyContent: "center",
+                        maxWidth: "100%",
+                      }}
+                    >
                       {contributor.specialties.map((specialty) => (
                         <Chip
                           key={specialty}
@@ -282,12 +488,12 @@ const AskPage = () => {
                           size="small"
                           color={getSpecialtyColor(specialty)}
                           variant="outlined"
-                          sx={{ 
-                            fontSize: '0.7rem', 
+                          sx={{
+                            fontSize: "0.7rem",
                             height: 24,
-                            '& .MuiChip-label': {
-                              px: 1
-                            }
+                            "& .MuiChip-label": {
+                              px: 1,
+                            },
                           }}
                         />
                       ))}
@@ -295,27 +501,34 @@ const AskPage = () => {
                   </Box>
 
                   {/* Stats */}
-                  <Box sx={{ textAlign: 'center', mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem' }}>
-                      <School fontSize="small" sx={{ verticalAlign: 'middle', mr: 0.5 }} />
+                  <Box sx={{ textAlign: "center", mb: 2 }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ fontSize: "0.8rem" }}
+                    >
+                      <School
+                        fontSize="small"
+                        sx={{ verticalAlign: "middle", mr: 0.5 }}
+                      />
                       {contributor.resourceCount} resources shared
                     </Typography>
                   </Box>
 
                   {/* Bio */}
-                  <Typography 
-                    variant="body2" 
-                    color="text.secondary" 
-                    sx={{ 
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
                       mb: 2,
-                      fontSize: '0.8rem',
-                      display: '-webkit-box',
+                      fontSize: "0.8rem",
+                      display: "-webkit-box",
                       WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                      textAlign: 'center',
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      textAlign: "center",
                       flexGrow: 1,
-                      lineHeight: 1.4
+                      lineHeight: 1.4,
                     }}
                   >
                     {contributor.bio}
@@ -328,85 +541,31 @@ const AskPage = () => {
                     size="small"
                     startIcon={<Chat fontSize="small" />}
                     onClick={() => handleStartChat(contributor)}
-                    sx={{ borderRadius: 2, mt: 'auto' }}
+                    sx={{ borderRadius: 2, mt: "auto" }}
                   >
                     Chat
                   </Button>
                 </CardContent>
               </Card>
             ))}
-            
           </Box>
         )}
       </Box>
-      
 
-      {/* Chat Sidebar */}
-      <Drawer
-        anchor="right"
+      {/* Chat Modal */}
+      <ChatModal
         open={chatOpen}
         onClose={handleCloseChat}
-        sx={{
-          '& .MuiDrawer-paper': {
-            width: 400,
-            maxWidth: '90vw'
-          }
-        }}
-      >
-        {selectedContributor && (
-          <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {/* Chat Header */}
-            <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar src={selectedContributor.avatar} sx={{ bgcolor: 'primary.main' }}>
-                {selectedContributor.name.split(' ').map(n => n[0]).join('')}
-              </Avatar>
-              <Box sx={{ flexGrow: 1 }}>
-                <Typography variant="h6">{selectedContributor.name}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {selectedContributor.specialties.join(', ')}
-                </Typography>
-              </Box>
-              <IconButton onClick={handleCloseChat}>
-                <Close />
-              </IconButton>
-            </Box>
+        contributor={selectedContributor}
+      />
 
-            {/* Chat Messages Area */}
-            <Box sx={{ flexGrow: 1, p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Paper sx={{ p: 3, textAlign: 'center', bgcolor: 'grey.50' }}>
-                <Chat sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
-                <Typography variant="h6" gutterBottom>
-                  Chat Coming Soon!
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Real-time messaging will be implemented in the next update.
-                </Typography>
-              </Paper>
-            </Box>
-
-            {/* Message Input */}
-            <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
-              <TextField
-                fullWidth
-                placeholder="Type your message..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleSendMessage} disabled={!message.trim()}>
-                        <Send />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                disabled
-              />
-            </Box>
-          </Box>
-        )}
-      </Drawer>
+      {/* Become Contributor Modal */}
+      <BecomeContributorModal
+        open={becomeContributorOpen}
+        onClose={() => setBecomeContributorOpen(false)}
+        onSubmit={handleBecomeContributor}
+        isSubmitting={isBecomingContributor}
+      />
     </Container>
   );
 };

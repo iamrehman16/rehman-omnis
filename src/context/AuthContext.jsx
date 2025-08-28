@@ -83,8 +83,22 @@ export const AuthProvider = ({ children }) => {
       if (user) {
         // Create or update user profile in Firestore
         await userService.createOrUpdateUserProfile(user);
+        
+        // Fetch full user profile with role information
+        const profileResult = await userService.getUserProfile(user.uid);
+        if (profileResult.success) {
+          // Merge Firebase Auth user with Firestore profile data
+          const fullUser = {
+            ...user,
+            ...profileResult.data
+          };
+          dispatch({ type: AUTH_ACTIONS.SET_USER, payload: fullUser });
+        } else {
+          dispatch({ type: AUTH_ACTIONS.SET_USER, payload: user });
+        }
+      } else {
+        dispatch({ type: AUTH_ACTIONS.SET_USER, payload: null });
       }
-      dispatch({ type: AUTH_ACTIONS.SET_USER, payload: user });
     });
 
     return () => unsubscribe();
@@ -169,6 +183,23 @@ export const AuthProvider = ({ children }) => {
   // Helper functions
   const isAuthenticated = state.status === AUTH_STATES.AUTHENTICATED;
   const isLoading = state.status === AUTH_STATES.LOADING || state.isLoading;
+  
+  // Role-based helper functions
+  const getUserRole = () => state.user?.role || 'student';
+  const isAdmin = () => getUserRole() === 'admin';
+  const isContributor = () => getUserRole() === 'contributor';
+  const isStudent = () => getUserRole() === 'student';
+  const isPendingContributor = () => getUserRole() === 'pending_contributor';
+  const isRejectedContributor = () => getUserRole() === 'rejected_contributor';
+  
+  // Permission helpers
+  const canAccessAdminPages = () => isAdmin();
+  const canEditContent = () => isAdmin() || isContributor();
+  const canDeleteContent = () => isAdmin() || isContributor();
+  const canAddContent = () => isAdmin() || isContributor();
+  const canViewAdminPanel = () => isAdmin();
+  const canManageUsers = () => isAdmin();
+  const canApproveContributors = () => isAdmin();
 
   const value = {
     // State
@@ -176,6 +207,23 @@ export const AuthProvider = ({ children }) => {
     error: state.error,
     isAuthenticated,
     isLoading,
+    
+    // Role helpers
+    getUserRole,
+    isAdmin,
+    isContributor,
+    isStudent,
+    isPendingContributor,
+    isRejectedContributor,
+    
+    // Permission helpers
+    canAccessAdminPages,
+    canEditContent,
+    canDeleteContent,
+    canAddContent,
+    canViewAdminPanel,
+    canManageUsers,
+    canApproveContributors,
     
     // Actions
     login,

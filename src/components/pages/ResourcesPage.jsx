@@ -21,10 +21,11 @@ import DeleteConfirmationDialog from '../resources/DeleteConfirmationDialog';
 import ResourceCard from '../resources/ResourceCard';
 import resourcesService from '../../services/resources.service';
 import { useAuth } from '../../context/AuthContext';
+import RoleBasedAccess from '../common/RoleBasedAccess';
 import { SEMESTER_STRUCTURE, RESOURCE_TYPES } from '../../utils/dataStructures';
 
 const ResourcesPage = () => {
-  const { user } = useAuth();
+  const { user, canAddContent } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -168,14 +169,16 @@ const ResourcesPage = () => {
             Browse and add academic resources organized by semester and subject
           </Typography>
         </Box>
-        <Button
-          variant="contained"
-          startIcon={<Add />}
-          onClick={() => setModalOpen(true)}
-          sx={{ minWidth: 140 }}
-        >
-          Add Resource
-        </Button>
+        <RoleBasedAccess requirePermission="canAddContent">
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => setModalOpen(true)}
+            sx={{ minWidth: 140 }}
+          >
+            Add Resource
+          </Button>
+        </RoleBasedAccess>
       </Box>
 
       {loading ? (

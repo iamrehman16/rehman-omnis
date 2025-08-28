@@ -16,12 +16,14 @@ import {
   DialogActions,
   Button,
   Divider,
+  Chip,
 } from "@mui/material";
-import { LogoutOutlined, PersonOutline } from "@mui/icons-material";
+import { LogoutOutlined, PersonOutline, AdminPanelSettings } from "@mui/icons-material";
 import { useAuth } from "../../context/AuthContext";
+import RoleBasedAccess from "../common/RoleBasedAccess";
 
 const Header = ({ currentTab, onTabChange, onProfileClick }) => {
-  const { user, logout } = useAuth();
+  const { user, logout, getUserRole, isAdmin, canAccessAdminPages } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
@@ -41,6 +43,27 @@ const Header = ({ currentTab, onTabChange, onProfileClick }) => {
   const handleProfileClick = () => {
     onProfileClick();
     handleMenuClose();
+  };
+
+  // Get user role for display
+  const userRole = getUserRole();
+  const getRoleColor = (role) => {
+    switch (role) {
+      case 'admin': return 'error';
+      case 'contributor': return 'primary';
+      case 'pending_contributor': return 'warning';
+      default: return 'default';
+    }
+  };
+  
+  const getRoleLabel = (role) => {
+    switch (role) {
+      case 'admin': return 'Admin';
+      case 'contributor': return 'Contributor';
+      case 'pending_contributor': return 'Pending';
+      case 'rejected_contributor': return 'Student';
+      default: return 'Student';
+    }
   };
 
   const handleLogoutConfirm = async () => {
@@ -115,7 +138,16 @@ const Header = ({ currentTab, onTabChange, onProfileClick }) => {
             >
               <Tab label="Resources" value="resources" />
               <Tab label="Ask" value="ask" />
+              {getUserRole() === 'admin' && (
+                <Tab 
+                  label="Admin" 
+                  value="admin" 
+                  icon={<AdminPanelSettings />}
+                  iconPosition="start"
+                />
+              )}
             </Tabs>
+
           </Box>
 
           {/* User Avatar */}
@@ -153,9 +185,17 @@ const Header = ({ currentTab, onTabChange, onProfileClick }) => {
         sx={{ mt: 1 }}
       >
         <Box sx={{ px: 2, py: 1, minWidth: 200 }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-            {user?.displayName || "User"}
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+              {user?.displayName || "User"}
+            </Typography>
+            <Chip 
+              label={getRoleLabel(userRole)} 
+              size="small" 
+              color={getRoleColor(userRole)}
+              variant="outlined"
+            />
+          </Box>
           <Typography variant="body2" color="text.secondary">
             {user?.email}
           </Typography>

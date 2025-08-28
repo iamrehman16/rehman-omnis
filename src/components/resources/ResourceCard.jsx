@@ -22,6 +22,7 @@ import {
   Edit,
   Delete
 } from '@mui/icons-material';
+import { useAuth } from '../../context/AuthContext';
 
 const getResourceIcon = (type) => {
   switch (type) {
@@ -58,6 +59,7 @@ const getResourceColor = (type) => {
 };
 
 const ResourceCard = ({ resource, currentUser, onEdit, onDelete }) => {
+  const { canEditContent, canDeleteContent, isAdmin } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl);
 
@@ -81,7 +83,10 @@ const ResourceCard = ({ resource, currentUser, onEdit, onDelete }) => {
   };
 
   // Check if current user can edit/delete this resource
-  const canModify = currentUser && resource.userId === currentUser.uid;
+  // Owner can always modify, admins can modify any resource, contributors can modify any resource
+  const isOwner = currentUser && resource.userId === currentUser.uid;
+  const canModify = isOwner || canEditContent();
+  const canRemove = isOwner || canDeleteContent();
   const handleDownloadResource = () => {
     // Convert Google Drive share URL to direct download URL
     const convertToDirectDownloadUrl = (shareUrl) => {
@@ -219,18 +224,22 @@ const ResourceCard = ({ resource, currentUser, onEdit, onDelete }) => {
           horizontal: 'right',
         }}
       >
-        <MenuItem onClick={handleEdit}>
-          <ListItemIcon>
-            <Edit fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Edit</ListItemText>
-        </MenuItem>
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
-          <ListItemIcon>
-            <Delete fontSize="small" sx={{ color: 'error.main' }} />
-          </ListItemIcon>
-          <ListItemText>Delete</ListItemText>
-        </MenuItem>
+        {canModify && (
+          <MenuItem onClick={handleEdit}>
+            <ListItemIcon>
+              <Edit fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Edit</ListItemText>
+          </MenuItem>
+        )}
+        {canRemove && (
+          <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+            <ListItemIcon>
+              <Delete fontSize="small" sx={{ color: 'error.main' }} />
+            </ListItemIcon>
+            <ListItemText>Delete</ListItemText>
+          </MenuItem>
+        )}
       </Menu>
     </Card>
   );
