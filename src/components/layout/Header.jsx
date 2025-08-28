@@ -95,32 +95,25 @@ const Header = ({ currentTab, onTabChange, onProfileClick }) => {
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
           {/* Logo and Brand */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Box
-              sx={{
-                width: 40,
-                height: 40,
-                bgcolor: "primary.main",
-                borderRadius: "8px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Typography
-                variant="h6"
-                sx={{ color: "white", fontWeight: "bold" }}
-              >
-                O
-              </Typography>
-            </Box>
-            <Typography
-              variant="h5"
-              sx={{ fontWeight: "bold", color: "text.primary" }}
-            >
-              Omnis
-            </Typography>
-          </Box>
+         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Box
+            component="img"
+            src="/omnis-logo.png"
+            alt="Omnis Logo"
+            sx={{
+              width: 40,
+              height: 40,
+              objectFit: "contain",
+              borderRadius: "8px",
+            }}
+          />
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: "bold", color: "text.primary" }}
+          >
+            Omnis
+          </Typography>
+        </Box>
 
           {/* Navigation Tabs */}
           <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
