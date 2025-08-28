@@ -166,7 +166,7 @@ const ResourcesPage = () => {
             Resources
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Browse and add academic resources organized by semester and subject
+            Browse academic resources organized by semester and subject
           </Typography>
         </Box>
         <RoleBasedAccess requirePermission="canAddContent">
@@ -186,9 +186,11 @@ const ResourcesPage = () => {
           <CircularProgress />
         </Box>
       ) : resources.length === 0 ? (
-        <Alert severity="info" sx={{ mb: 4 }}>
-          No resources available yet. Click the "Add Resource" button to add your first resource!
-        </Alert>
+        <RoleBasedAccess allowedRoles={['admin', 'contributor']}>
+          <Alert severity="info" sx={{ mb: 4 }}>
+            No resources available yet. Click the "Add Resource" button to add your first resource!
+          </Alert>
+        </RoleBasedAccess>
       ) : null}
 
       {/* Semester Accordions */}
