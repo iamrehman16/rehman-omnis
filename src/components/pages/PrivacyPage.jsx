@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Container,
@@ -9,8 +9,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon
-} from '@mui/material';
+  ListItemIcon,
+} from "@mui/material";
 import {
   ArrowBack as ArrowBackIcon,
   Security as SecurityIcon,
@@ -18,203 +18,387 @@ import {
   Shield as ShieldIcon,
   Lock as LockIcon,
   Visibility as VisibilityIcon,
-  Storage as StorageIcon
-} from '@mui/icons-material';
+  Storage as StorageIcon,
+} from "@mui/icons-material";
 
 const PrivacyPage = ({ onBack }) => {
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50', py: 4 }}>
-      <Container maxWidth="md">
+    <Box sx={{ minHeight: "100vh", bgcolor: "grey.50", py: { xs: 2, sm: 4 } }}>
+      <Container maxWidth="md" sx={{ px: { xs: 1, sm: 3 } }}>
         {/* Header */}
-        <Box sx={{ mb: 4 }}>
+        <Box sx={{ mb: { xs: 3, sm: 4 } }}>
           <Button
             startIcon={<ArrowBackIcon />}
             onClick={onBack}
-            sx={{ mb: 3 }}
+            sx={{
+              mb: { xs: 2, sm: 3 },
+              fontSize: { xs: "0.8rem", sm: "0.875rem" },
+            }}
           >
             Back to App
           </Button>
-          
-          <Paper sx={{ 
-            p: 4, 
-            textAlign: 'center', 
-            background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
-            color: 'white' 
-          }}>
-            <SecurityIcon sx={{ fontSize: 60, mb: 2 }} />
-            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
+
+          <Paper
+            sx={{
+              p: { xs: 2, sm: 3, md: 4 },
+              textAlign: "center",
+              background: "linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)",
+              color: "white",
+            }}
+          >
+            <SecurityIcon
+              sx={{ fontSize: { xs: 40, sm: 60 }, mb: { xs: 1, sm: 2 } }}
+            />
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: "bold",
+                mb: { xs: 1, sm: 2 },
+                fontSize: { xs: "1.8rem", sm: "2.5rem", md: "3rem" },
+              }}
+            >
               Privacy Policy
             </Typography>
-            <Typography variant="h6" sx={{ opacity: 0.9 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                opacity: 0.9,
+                fontSize: { xs: "1rem", sm: "1.25rem" },
+              }}
+            >
               Your privacy is important to us
             </Typography>
           </Paper>
         </Box>
 
         {/* Content */}
-        <Paper sx={{ p: 4, mb: 4 }}>
-          <Typography variant="body1" sx={{ mb: 3, fontSize: '1.1rem' }}>
+        <Paper sx={{ p: { xs: 2, sm: 3, md: 4 }, mb: { xs: 3, sm: 4 } }}>
+          <Typography
+            variant="body1"
+            sx={{
+              mb: { xs: 2, sm: 3 },
+              fontSize: { xs: "0.9rem", sm: "1.1rem" },
+            }}
+          >
             <strong>Last updated:</strong> {new Date().toLocaleDateString()}
           </Typography>
 
-          <Typography variant="body1" sx={{ mb: 4, lineHeight: 1.8 }}>
-            At Omnis, we are committed to protecting your privacy and ensuring the security of your personal information. 
-            This Privacy Policy explains how we collect, use, and safeguard your data when you use our platform.
+          <Typography
+            variant="body1"
+            sx={{
+              mb: { xs: 3, sm: 4 },
+              lineHeight: 1.8,
+              fontSize: { xs: "0.9rem", sm: "1rem" },
+            }}
+          >
+            At Omnis, we are committed to protecting your privacy and ensuring
+            the security of your personal information. This Privacy Policy
+            explains how we collect, use, and safeguard your data when you use
+            our platform.
           </Typography>
 
           {/* Information We Collect */}
-          <Box sx={{ mb: 4 }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ mb: { xs: 3, sm: 4 } }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: "bold",
+                mb: { xs: 2, sm: 3 },
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                fontSize: { xs: "1.25rem", sm: "1.5rem" },
+              }}
+            >
               <InfoIcon color="primary" />
               Information We Collect
             </Typography>
-            
-            <List>
-              <ListItem>
+
+            <List sx={{ py: 0 }}>
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                 <ListItemIcon>
                   <VisibilityIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText
                   primary="Account Information"
                   secondary="Name, email address, and profile information you provide during registration"
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.9rem", sm: "1rem" },
+                    fontWeight: 500,
+                  }}
+                  secondaryTypographyProps={{
+                    fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                  }}
                 />
               </ListItem>
-              <ListItem>
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                 <ListItemIcon>
                   <StorageIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText
                   primary="Usage Data"
                   secondary="Information about how you interact with our platform, including pages visited and features used"
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.9rem", sm: "1rem" },
+                    fontWeight: 500,
+                  }}
+                  secondaryTypographyProps={{
+                    fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                  }}
                 />
               </ListItem>
-              <ListItem>
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                 <ListItemIcon>
                   <SecurityIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText
                   primary="Communication Data"
                   secondary="Messages and content you share through our chat features and resource uploads"
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.9rem", sm: "1rem" },
+                    fontWeight: 500,
+                  }}
+                  secondaryTypographyProps={{
+                    fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                  }}
                 />
               </ListItem>
             </List>
           </Box>
 
-          <Divider sx={{ my: 4 }} />
+          <Divider sx={{ my: { xs: 3, sm: 4 } }} />
 
           {/* How We Use Your Information */}
-          <Box sx={{ mb: 4 }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ mb: { xs: 3, sm: 4 } }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: "bold",
+                mb: { xs: 2, sm: 3 },
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                fontSize: { xs: "1.25rem", sm: "1.5rem" },
+              }}
+            >
               <ShieldIcon color="primary" />
               How We Use Your Information
             </Typography>
-            
-            <List>
-              <ListItem>
+
+            <List sx={{ py: 0 }}>
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                 <ListItemText
                   primary="• Provide and improve our educational services"
-                  sx={{ mb: 1 }}
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
                 />
               </ListItem>
-              <ListItem>
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                 <ListItemText
                   primary="• Facilitate communication between students and contributors"
-                  sx={{ mb: 1 }}
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
                 />
               </ListItem>
-              <ListItem>
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                 <ListItemText
                   primary="• Personalize your learning experience"
-                  sx={{ mb: 1 }}
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
                 />
               </ListItem>
-              <ListItem>
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                 <ListItemText
                   primary="• Send important updates and notifications"
-                  sx={{ mb: 1 }}
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
                 />
               </ListItem>
-              <ListItem>
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                 <ListItemText
                   primary="• Ensure platform security and prevent misuse"
-                  sx={{ mb: 1 }}
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
                 />
               </ListItem>
             </List>
           </Box>
 
-          <Divider sx={{ my: 4 }} />
+          <Divider sx={{ my: { xs: 3, sm: 4 } }} />
 
           {/* Data Security */}
-          <Box sx={{ mb: 4 }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ mb: { xs: 3, sm: 4 } }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: "bold",
+                mb: { xs: 2, sm: 3 },
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                fontSize: { xs: "1.25rem", sm: "1.5rem" },
+              }}
+            >
               <LockIcon color="primary" />
               Data Security
             </Typography>
-            
-            <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.8 }}>
-              We implement industry-standard security measures to protect your personal information:
+
+            <Typography
+              variant="body1"
+              sx={{
+                mb: { xs: 2, sm: 3 },
+                lineHeight: 1.8,
+                fontSize: { xs: "0.9rem", sm: "1rem" },
+              }}
+            >
+              We implement industry-standard security measures to protect your
+              personal information:
             </Typography>
 
-            <List>
-              <ListItem>
-                <ListItemText primary="• Encrypted data transmission using HTTPS" />
+            <List sx={{ py: 0 }}>
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
+                <ListItemText
+                  primary="• Encrypted data transmission using HTTPS"
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
+                />
               </ListItem>
-              <ListItem>
-                <ListItemText primary="• Secure authentication through Firebase" />
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
+                <ListItemText
+                  primary="• Secure authentication through Firebase"
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
+                />
               </ListItem>
-              <ListItem>
-                <ListItemText primary="• Regular security audits and updates" />
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
+                <ListItemText
+                  primary="• Regular security audits and updates"
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
+                />
               </ListItem>
-              <ListItem>
-                <ListItemText primary="• Limited access to personal data by authorized personnel only" />
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
+                <ListItemText
+                  primary="• Limited access to personal data by authorized personnel only"
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
+                />
               </ListItem>
             </List>
           </Box>
 
-          <Divider sx={{ my: 4 }} />
+          <Divider sx={{ my: { xs: 3, sm: 4 } }} />
 
           {/* Your Rights */}
-          <Box sx={{ mb: 4 }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3 }}>
+          <Box sx={{ mb: { xs: 3, sm: 4 } }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: "bold",
+                mb: { xs: 2, sm: 3 },
+                fontSize: { xs: "1.25rem", sm: "1.5rem" },
+              }}
+            >
               Your Rights
             </Typography>
-            
-            <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.8 }}>
+
+            <Typography
+              variant="body1"
+              sx={{
+                mb: 2,
+                lineHeight: 1.8,
+                fontSize: { xs: "0.9rem", sm: "1rem" },
+              }}
+            >
               You have the right to:
             </Typography>
 
-            <List>
-              <ListItem>
-                <ListItemText primary="• Access and review your personal data" />
+            <List sx={{ py: 0 }}>
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
+                <ListItemText
+                  primary="• Access and review your personal data"
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
+                />
               </ListItem>
-              <ListItem>
-                <ListItemText primary="• Update or correct your information" />
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
+                <ListItemText
+                  primary="• Update or correct your information"
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
+                />
               </ListItem>
-              <ListItem>
-                <ListItemText primary="• Delete your account and associated data" />
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
+                <ListItemText
+                  primary="• Delete your account and associated data"
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
+                />
               </ListItem>
-              <ListItem>
-                <ListItemText primary="• Opt-out of non-essential communications" />
+              <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
+                <ListItemText
+                  primary="• Opt-out of non-essential communications"
+                  primaryTypographyProps={{
+                    fontSize: { xs: "0.85rem", sm: "1rem" },
+                  }}
+                />
               </ListItem>
             </List>
           </Box>
 
-          <Divider sx={{ my: 4 }} />
+          <Divider sx={{ my: { xs: 3, sm: 4 } }} />
 
           {/* Contact */}
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
+          <Box sx={{ textAlign: "center" }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: "bold",
+                mb: { xs: 1, sm: 2 },
+                fontSize: { xs: "1.25rem", sm: "1.5rem" },
+              }}
+            >
               Questions About Privacy?
             </Typography>
-            <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.8 }}>
-              If you have any questions about this Privacy Policy or how we handle your data, 
-              please don't hesitate to contact us.
+            <Typography
+              variant="body1"
+              sx={{
+                mb: { xs: 2, sm: 3 },
+                lineHeight: 1.8,
+                fontSize: { xs: "0.9rem", sm: "1rem" },
+              }}
+            >
+              If you have any questions about this Privacy Policy or how we
+              handle your data, please don't hesitate to contact us.
             </Typography>
-            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+            <Typography
+              variant="body1"
+              sx={{
+                fontWeight: "bold",
+                fontSize: { xs: "0.9rem", sm: "1rem" },
+              }}
+            >
               Email: support.omnis@gmail.com
             </Typography>
-            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+            <Typography
+              variant="body1"
+              sx={{
+                fontWeight: "bold",
+                fontSize: { xs: "0.9rem", sm: "1rem" },
+              }}
+            >
               Phone: 03222521336
             </Typography>
           </Box>

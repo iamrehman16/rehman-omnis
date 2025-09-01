@@ -86,29 +86,45 @@ const HelpCenterPage = ({ onBack, onNavigate }) => {
 
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50', py: 4 }}>
-      <Container maxWidth="lg">
+    <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50', py: { xs: 2, sm: 4 } }}>
+      <Container maxWidth="lg" sx={{ px: { xs: 1, sm: 3 } }}>
         {/* Header */}
-        <Box sx={{ mb: 4 }}>
+        <Box sx={{ mb: { xs: 3, sm: 4 } }}>
           <Button
             startIcon={<ArrowBackIcon />}
             onClick={onBack}
-            sx={{ mb: 3 }}
+            sx={{ 
+              mb: { xs: 2, sm: 3 },
+              fontSize: { xs: '0.8rem', sm: '0.875rem' }
+            }}
           >
             Back to App
           </Button>
           
           <Paper sx={{ 
-            p: 4, 
+            p: { xs: 2, sm: 3, md: 4 }, 
             textAlign: 'center', 
             background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
             color: 'white' 
           }}>
-            <HelpIcon sx={{ fontSize: 60, mb: 2 }} />
-            <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
+            <HelpIcon sx={{ fontSize: { xs: 40, sm: 60 }, mb: { xs: 1, sm: 2 } }} />
+            <Typography 
+              variant="h3" 
+              sx={{ 
+                fontWeight: 'bold', 
+                mb: { xs: 1, sm: 2 },
+                fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem' }
+              }}
+            >
               Help Center
             </Typography>
-            <Typography variant="h6" sx={{ opacity: 0.9 }}>
+            <Typography 
+              variant="h6" 
+              sx={{ 
+                opacity: 0.9,
+                fontSize: { xs: '1rem', sm: '1.25rem' }
+              }}
+            >
               Find answers to your questions and get the most out of Omnis
             </Typography>
           </Paper>
@@ -117,8 +133,16 @@ const HelpCenterPage = ({ onBack, onNavigate }) => {
 
 
         {/* Frequently Asked Questions */}
-        <Paper sx={{ p: 4, mb: 4 }}>
-          <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3, textAlign: 'center' }}>
+        <Paper sx={{ p: { xs: 2, sm: 3, md: 4 }, mb: { xs: 3, sm: 4 } }}>
+          <Typography 
+            variant="h4" 
+            sx={{ 
+              fontWeight: 'bold', 
+              mb: { xs: 2, sm: 3 }, 
+              textAlign: 'center',
+              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }
+            }}
+          >
             Frequently Asked Questions
           </Typography>
           
@@ -135,8 +159,11 @@ const HelpCenterPage = ({ onBack, onNavigate }) => {
                   sx={{
                     '& .MuiAccordionSummary-content': {
                       alignItems: 'center',
-                      gap: 2
-                    }
+                      gap: { xs: 1, sm: 2 },
+                      flexDirection: { xs: 'column', sm: 'row' },
+                      alignItems: { xs: 'flex-start', sm: 'center' }
+                    },
+                    py: { xs: 1, sm: 2 }
                   }}
                 >
                   <Chip 
@@ -144,87 +171,148 @@ const HelpCenterPage = ({ onBack, onNavigate }) => {
                     size="small" 
                     color="primary" 
                     variant="outlined"
+                    sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}
                   />
-                  <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      fontWeight: 500,
+                      fontSize: { xs: '0.9rem', sm: '1.1rem', md: '1.25rem' }
+                    }}
+                  >
                     {faq.question}
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails>
-                  <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
+                <AccordionDetails sx={{ px: { xs: 2, sm: 3 } }}>
+                  <Typography 
+                    variant="body1" 
+                    sx={{ 
+                      lineHeight: 1.7,
+                      fontSize: { xs: '0.85rem', sm: '1rem' }
+                    }}
+                  >
                     {faq.answer}
                   </Typography>
                 </AccordionDetails>
               </Accordion>
             ))}
           </Box>
-
-
         </Paper>
 
         {/* Quick Tips */}
-        <Paper sx={{ p: 4, mb: 4 }}>
-          <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3, textAlign: 'center' }}>
+        <Paper sx={{ p: { xs: 2, sm: 3, md: 4 }, mb: { xs: 3, sm: 4 } }}>
+          <Typography 
+            variant="h4" 
+            sx={{ 
+              fontWeight: 'bold', 
+              mb: { xs: 2, sm: 3 }, 
+              textAlign: 'center',
+              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }
+            }}
+          >
             Quick Tips for Success
           </Typography>
-          <Grid container spacing={3}>
+          <Grid container spacing={{ xs: 2, sm: 3 }}>
             <Grid item xs={12} md={6}>
-              <List>
-                <ListItem>
+              <List sx={{ py: 0 }}>
+                <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                   <ListItemIcon>
                     <CheckIcon color="success" />
                   </ListItemIcon>
                   <ListItemText
                     primary="Complete your profile"
                     secondary="Add your semester and subjects for personalized content"
+                    primaryTypographyProps={{
+                      fontSize: { xs: '0.9rem', sm: '1rem' },
+                      fontWeight: 500
+                    }}
+                    secondaryTypographyProps={{
+                      fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                    }}
                   />
                 </ListItem>
-                <ListItem>
+                <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                   <ListItemIcon>
                     <CheckIcon color="success" />
                   </ListItemIcon>
                   <ListItemText
                     primary="Use specific search terms"
                     secondary="Search by subject, semester, or resource type for better results"
+                    primaryTypographyProps={{
+                      fontSize: { xs: '0.9rem', sm: '1rem' },
+                      fontWeight: 500
+                    }}
+                    secondaryTypographyProps={{
+                      fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                    }}
                   />
                 </ListItem>
-                <ListItem>
+                <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                   <ListItemIcon>
                     <CheckIcon color="success" />
                   </ListItemIcon>
                   <ListItemText
                     primary="Engage with the community"
                     secondary="Ask questions, share resources, and help fellow students"
+                    primaryTypographyProps={{
+                      fontSize: { xs: '0.9rem', sm: '1rem' },
+                      fontWeight: 500
+                    }}
+                    secondaryTypographyProps={{
+                      fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                    }}
                   />
                 </ListItem>
               </List>
             </Grid>
             <Grid item xs={12} md={6}>
-              <List>
-                <ListItem>
+              <List sx={{ py: 0 }}>
+                <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                   <ListItemIcon>
                     <CheckIcon color="success" />
                   </ListItemIcon>
                   <ListItemText
                     primary="Try the AI Assistant"
                     secondary="Get instant help with academic questions and course content"
+                    primaryTypographyProps={{
+                      fontSize: { xs: '0.9rem', sm: '1rem' },
+                      fontWeight: 500
+                    }}
+                    secondaryTypographyProps={{
+                      fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                    }}
                   />
                 </ListItem>
-                <ListItem>
+                <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                   <ListItemIcon>
                     <CheckIcon color="success" />
                   </ListItemIcon>
                   <ListItemText
                     primary="Organize your resources"
                     secondary="Use clear titles and descriptions when uploading files"
+                    primaryTypographyProps={{
+                      fontSize: { xs: '0.9rem', sm: '1rem' },
+                      fontWeight: 500
+                    }}
+                    secondaryTypographyProps={{
+                      fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                    }}
                   />
                 </ListItem>
-                <ListItem>
+                <ListItem sx={{ px: { xs: 1, sm: 2 } }}>
                   <ListItemIcon>
                     <CheckIcon color="success" />
                   </ListItemIcon>
                   <ListItemText
                     primary="Stay updated"
                     secondary="Check for new resources and announcements regularly"
+                    primaryTypographyProps={{
+                      fontSize: { xs: '0.9rem', sm: '1rem' },
+                      fontWeight: 500
+                    }}
+                    secondaryTypographyProps={{
+                      fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                    }}
                   />
                 </ListItem>
               </List>
@@ -233,12 +321,32 @@ const HelpCenterPage = ({ onBack, onNavigate }) => {
         </Paper>
 
         {/* Contact Support */}
-        <Paper sx={{ p: 4, textAlign: 'center' }}>
-          <ContactIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-          <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
+        <Paper sx={{ p: { xs: 2, sm: 3, md: 4 }, textAlign: 'center' }}>
+          <ContactIcon sx={{ 
+            fontSize: { xs: 36, sm: 48 }, 
+            color: 'primary.main', 
+            mb: { xs: 1, sm: 2 } 
+          }} />
+          <Typography 
+            variant="h4" 
+            sx={{ 
+              fontWeight: 'bold', 
+              mb: { xs: 1, sm: 2 },
+              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }
+            }}
+          >
             Still Need Help?
           </Typography>
-          <Typography variant="body1" sx={{ mb: 3, maxWidth: '600px', mx: 'auto', lineHeight: 1.7 }}>
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              mb: { xs: 2, sm: 3 }, 
+              maxWidth: '600px', 
+              mx: 'auto', 
+              lineHeight: 1.7,
+              fontSize: { xs: '0.9rem', sm: '1rem' }
+            }}
+          >
             Can't find what you're looking for? Our support team is here to help! 
             Reach out to us and we'll get back to you as soon as possible.
           </Typography>
@@ -255,7 +363,8 @@ const HelpCenterPage = ({ onBack, onNavigate }) => {
                   background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
                   '&:hover': {
                     background: 'linear-gradient(135deg, #1565c0 0%, #1e88e5 100%)',
-                  }
+                  },
+                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
                 }}
               >
                 Email Support
@@ -271,20 +380,38 @@ const HelpCenterPage = ({ onBack, onNavigate }) => {
                   localStorage.setItem('omnis-current-tab', 'ask');
                   onBack();
                 }}
+                sx={{
+                  fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                }}
               >
                 Ask Community
               </Button>
             </Grid>
           </Grid>
           
-          <Box sx={{ mt: 3, pt: 3, borderTop: 1, borderColor: 'divider' }}>
-            <Typography variant="body2" color="text.secondary">
+          <Box sx={{ mt: { xs: 2, sm: 3 }, pt: { xs: 2, sm: 3 }, borderTop: 1, borderColor: 'divider' }}>
+            <Typography 
+              variant="body2" 
+              color="text.secondary"
+              sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}
+            >
               <strong>Email:</strong> support.omnis@gmail.com
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography 
+              variant="body2" 
+              color="text.secondary"
+              sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}
+            >
               <strong>Phone:</strong> 03222521336
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            <Typography 
+              variant="body2" 
+              color="text.secondary" 
+              sx={{ 
+                mt: 1,
+                fontSize: { xs: '0.8rem', sm: '0.875rem' }
+              }}
+            >
               We typically respond within 24 hours
             </Typography>
           </Box>
