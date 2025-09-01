@@ -159,13 +159,31 @@ const ResourcesPage = () => {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+    <Container maxWidth="xl" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 3 } }}>
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: { xs: 'column', sm: 'row' },
+        justifyContent: 'space-between', 
+        alignItems: { xs: 'flex-start', sm: 'center' }, 
+        mb: { xs: 3, sm: 4 },
+        gap: { xs: 2, sm: 0 }
+      }}>
         <Box>
-          <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
+          <Typography 
+            variant="h4" 
+            gutterBottom 
+            sx={{ 
+              fontWeight: 'bold',
+              fontSize: { xs: '1.8rem', sm: '2.125rem' }
+            }}
+          >
             Resources
           </Typography>
-          <Typography variant="body1" color="text.secondary">
+          <Typography 
+            variant="body1" 
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+          >
             Browse academic resources organized by semester and subject
           </Typography>
         </Box>
@@ -174,7 +192,10 @@ const ResourcesPage = () => {
             variant="contained"
             startIcon={<Add />}
             onClick={() => setModalOpen(true)}
-            sx={{ minWidth: 140 }}
+            sx={{ 
+              minWidth: { xs: '100%', sm: 140 },
+              alignSelf: { xs: 'stretch', sm: 'auto' }
+            }}
           >
             Add Resource
           </Button>
@@ -202,15 +223,27 @@ const ResourcesPage = () => {
           sx={{ mb: 2 }}
         >
           <AccordionSummary expandIcon={<ExpandMore />}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <School color="primary" />
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: { xs: 1, sm: 2 },
+              flexWrap: 'wrap'
+            }}>
+              <School color="primary" sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
+              <Typography 
+                variant="h6" 
+                sx={{ 
+                  fontWeight: 600,
+                  fontSize: { xs: '1rem', sm: '1.25rem' }
+                }}
+              >
                 Semester {semester}
               </Typography>
               <Chip 
                 label={`${subjects.length} subjects`} 
                 size="small" 
-                variant="outlined" 
+                variant="outlined"
+                sx={{ fontSize: { xs: '0.7rem', sm: '0.8rem' } }}
               />
             </Box>
           </AccordionSummary>
@@ -230,9 +263,23 @@ const ResourcesPage = () => {
                   sx={{ mb: 1, ml: 2 }}
                 >
                   <AccordionSummary expandIcon={<ExpandMore />}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <MenuBook color="secondary" />
-                      <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: { xs: 1, sm: 2 },
+                      flexWrap: 'wrap'
+                    }}>
+                      <MenuBook 
+                        color="secondary" 
+                        sx={{ fontSize: { xs: '1rem', sm: '1.2rem' } }}
+                      />
+                      <Typography 
+                        variant="subtitle1" 
+                        sx={{ 
+                          fontWeight: 500,
+                          fontSize: { xs: '0.9rem', sm: '1rem' }
+                        }}
+                      >
                         {subject}
                       </Typography>
                       {subjectResourceCount > 0 && (
@@ -241,6 +288,7 @@ const ResourcesPage = () => {
                           size="small" 
                           color="primary"
                           variant="outlined"
+                          sx={{ fontSize: { xs: '0.65rem', sm: '0.75rem' } }}
                         />
                       )}
                     </Box>
@@ -254,12 +302,20 @@ const ResourcesPage = () => {
 
                       return (
                         <Box key={type} sx={{ mb: 3 }}>
-                          <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600, color: 'primary.main' }}>
+                          <Typography 
+                            variant="subtitle2" 
+                            sx={{ 
+                              mb: 2, 
+                              fontWeight: 600, 
+                              color: 'primary.main',
+                              fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                            }}
+                          >
                             {type} ({typeResources.length})
                           </Typography>
-                          <Grid container spacing={2}>
+                          <Grid container spacing={{ xs: 1, sm: 2 }}>
                             {typeResources.map((resource) => (
-                              <Grid item xs={12} sm={6} md={4} key={resource.id}>
+                              <Grid item xs={12} sm={6} md={4} lg={3} key={resource.id}>
                                 <ResourceCard 
                                   resource={resource} 
                                   currentUser={user}

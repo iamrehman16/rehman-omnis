@@ -269,6 +269,8 @@ class ChatService {
       
       // Update read status for each unread message (only if not already read)
       const updatePromises = [];
+      let messagesMarkedCount = 0;
+      
       unreadMessages.forEach((messageDoc) => {
         const messageData = messageDoc.data();
         // Only update if the user hasn't already read this message
@@ -279,10 +281,14 @@ class ChatService {
               [`readBy.${userId}`]: serverTimestamp()
             })
           );
+          messagesMarkedCount++;
         }
       });
 
       await Promise.all(updatePromises);
+      
+      // Debug logging for read receipt marking
+      console.log(`📖 Marked ${messagesMarkedCount} messages as read for user ${userId.slice(-6)} in conversation ${conversationId.slice(-6)}`);
 
       // Reset unread count for this user in conversation
       await updateDoc(conversationRef, {

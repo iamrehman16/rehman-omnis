@@ -171,21 +171,31 @@ const AskPage = () => {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+    <Container maxWidth="xl" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 3 } }}>
       {/* Hero Section */}
-      <Box sx={{ mb: 6 }}>
-        <Box sx={{ textAlign: "center", mb: 4 }}>
+      <Box sx={{ mb: { xs: 4, sm: 6 } }}>
+        <Box sx={{ textAlign: "center", mb: { xs: 3, sm: 4 } }}>
           <Typography
             variant="h3"
             gutterBottom
-            sx={{ fontWeight: "bold", color: "primary.main" }}
+            sx={{ 
+              fontWeight: "bold", 
+              color: "primary.main",
+              fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem' }
+            }}
           >
             Connect with Contributors
           </Typography>
           <Typography
             variant="h6"
             color="text.secondary"
-            sx={{ mb: 2, maxWidth: 600, mx: "auto" }}
+            sx={{ 
+              mb: 2, 
+              maxWidth: 600, 
+              mx: "auto",
+              fontSize: { xs: '1rem', sm: '1.25rem' },
+              px: { xs: 2, sm: 0 }
+            }}
           >
             Get help from experienced students and subject experts. Start a
             conversation and learn together!
@@ -196,20 +206,22 @@ const AskPage = () => {
             sx={{
               display: "flex",
               justifyContent: "center",
-              gap: 3,
-              mb: 4,
+              gap: { xs: 2, sm: 3 },
+              mb: { xs: 3, sm: 4 },
               flexWrap: "wrap",
+              px: { xs: 1, sm: 0 }
             }}
           >
             <Paper
               elevation={3}
               sx={{
-                p: 3,
+                p: { xs: 2, sm: 3 },
                 textAlign: "center",
                 borderRadius: 3,
                 background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                 color: "white",
-                minWidth: 140,
+                minWidth: { xs: 100, sm: 140 },
+                flex: { xs: '1 1 100px', sm: '0 0 auto' },
                 transition: "transform 0.2s, box-shadow 0.2s",
                 "&:hover": {
                   transform: "translateY(-4px)",
@@ -222,6 +234,7 @@ const AskPage = () => {
                 sx={{ 
                   fontWeight: "bold",
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: { xs: '1.8rem', sm: '3rem' }
                 }}
               >
                 {contributors.length}+
@@ -231,6 +244,7 @@ const AskPage = () => {
                 sx={{ 
                   opacity: 0.9,
                   fontWeight: 500,
+                  fontSize: { xs: '0.8rem', sm: '1rem' }
                 }}
               >
                 Contributors
@@ -240,12 +254,13 @@ const AskPage = () => {
             <Paper
               elevation={3}
               sx={{
-                p: 3,
+                p: { xs: 2, sm: 3 },
                 textAlign: "center",
                 borderRadius: 3,
                 background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
                 color: "white",
-                minWidth: 140,
+                minWidth: { xs: 100, sm: 140 },
+                flex: { xs: '1 1 100px', sm: '0 0 auto' },
                 transition: "transform 0.2s, box-shadow 0.2s",
                 "&:hover": {
                   transform: "translateY(-4px)",
@@ -258,6 +273,7 @@ const AskPage = () => {
                 sx={{ 
                   fontWeight: "bold",
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: { xs: '1.8rem', sm: '3rem' }
                 }}
               >
                 {totalResources}+
@@ -267,6 +283,7 @@ const AskPage = () => {
                 sx={{ 
                   opacity: 0.9,
                   fontWeight: 500,
+                  fontSize: { xs: '0.8rem', sm: '1rem' }
                 }}
               >
                 Resources
@@ -276,12 +293,13 @@ const AskPage = () => {
             <Paper
               elevation={3}
               sx={{
-                p: 3,
+                p: { xs: 2, sm: 3 },
                 textAlign: "center",
                 borderRadius: 3,
                 background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
                 color: "white",
-                minWidth: 140,
+                minWidth: { xs: 100, sm: 140 },
+                flex: { xs: '1 1 100px', sm: '0 0 auto' },
                 transition: "transform 0.2s, box-shadow 0.2s",
                 "&:hover": {
                   transform: "translateY(-4px)",
@@ -294,6 +312,7 @@ const AskPage = () => {
                 sx={{ 
                   fontWeight: "bold",
                   textShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  fontSize: { xs: '1.8rem', sm: '3rem' }
                 }}
               >
                 24/7
@@ -303,6 +322,7 @@ const AskPage = () => {
                 sx={{ 
                   opacity: 0.9,
                   fontWeight: 500,
+                  fontSize: { xs: '0.8rem', sm: '1rem' }
                 }}
               >
                 Available
@@ -311,7 +331,12 @@ const AskPage = () => {
           </Box>
 
           {/* Search Bar */}
-          <Box sx={{ maxWidth: 500, mx: "auto", mb: 4 }}>
+          <Box sx={{ 
+            maxWidth: 500, 
+            mx: "auto", 
+            mb: { xs: 3, sm: 4 },
+            px: { xs: 2, sm: 0 }
+          }}>
             <TextField
               fullWidth
               placeholder="Search contributors by name or subject..."
@@ -328,6 +353,7 @@ const AskPage = () => {
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 3,
                   bgcolor: "background.paper",
+                  fontSize: { xs: '0.9rem', sm: '1rem' }
                 },
               }}
             />
@@ -340,12 +366,20 @@ const AskPage = () => {
         <Box
           sx={{
             display: "flex",
+            flexDirection: { xs: 'column', sm: 'row' },
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: { xs: 'flex-start', sm: 'center' },
             mb: 3,
+            gap: { xs: 2, sm: 0 }
           }}
         >
-          <Typography variant="h5" sx={{ fontWeight: 600 }}>
+          <Typography 
+            variant="h5" 
+            sx={{ 
+              fontWeight: 600,
+              fontSize: { xs: '1.3rem', sm: '1.5rem' }
+            }}
+          >
             Featured Contributors
           </Typography>
           {user && canApplyForContributor && (
@@ -391,18 +425,25 @@ const AskPage = () => {
         ) : (
           <Box
             sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 2,
-              justifyContent: "center",
+              display: "grid",
+              gridTemplateColumns: {
+                xs: '1fr',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(3, 1fr)',
+                lg: 'repeat(4, 1fr)'
+              },
+              gap: { xs: 2, sm: 3 },
+              justifyItems: "center",
+              px: { xs: 1, sm: 0 }
             }}
           >
             {filteredContributors.map((contributor) => (
               <Card
                 key={contributor.id}
                 sx={{
-                  width: 280,
-                  height: 340,
+                  width: { xs: '100%', sm: 280 },
+                  maxWidth: 320,
+                  height: { xs: 'auto', sm: 340 },
                   transition: "transform 0.2s, box-shadow 0.2s",
                   "&:hover": {
                     transform: "translateY(-2px)",

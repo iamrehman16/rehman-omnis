@@ -314,9 +314,24 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
     // Check if the other participant has read this message
     const isReadByOther = message.readBy && message.readBy[otherParticipantId];
     
-
+    // Additional check: if readBy has more than just the sender, it means someone else read it
+    const readByUserIds = message.readBy ? Object.keys(message.readBy) : [];
+    const hasOtherReaders = readByUserIds.some(userId => userId !== currentUser?.uid);
     
-    if (isReadByOther) {
+    // Debug logging for read receipt issues (only for problematic messages)
+    if (message.isOwn && hasOtherReaders && !isReadByOther) {
+      console.log(`🐛 Ghost read receipt detected for message ${message.id?.slice(-6)}:`, {
+        readBy: message.readBy,
+        readByUserIds,
+        currentUserId: currentUser?.uid?.slice(-6),
+        otherParticipantId: otherParticipantId?.slice(-6),
+        hasOtherReaders,
+        isReadByOther: !!isReadByOther
+      });
+    }
+    
+    // Use the more reliable check: if there are other readers besides the sender
+    if (isReadByOther || hasOtherReaders) {
       return 'read';
     } else {
       // Message has been sent and has a timestamp, so it's at least delivered

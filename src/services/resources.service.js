@@ -135,27 +135,30 @@ class ResourcesService {
   // Get resources by semester
   async getResourcesBySemester(semester) {
     try {
-      const q = query(
-        collection(db, this.collectionName),
-        where('semester', '==', semester),
-        orderBy('createdAt', 'desc')
+      console.log('Fetching resources for semester:', semester);
+      
+      // First, get all resources
+      const allResourcesResult = await this.getResources();
+      if (!allResourcesResult.success) {
+        return allResourcesResult;
+      }
+      
+      // Filter by semester on the client side to avoid Firestore index issues
+      const semesterResources = allResourcesResult.data.filter(resource => 
+        resource.semester === semester
       );
       
-      const querySnapshot = await getDocs(q);
-      const resources = [];
-      
-      querySnapshot.forEach((doc) => {
-        resources.push({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate(),
-          updatedAt: doc.data().updatedAt?.toDate()
-        });
-      });
+      console.log('Found resources for semester', semester, ':', semesterResources.length);
+      console.log('Resource details:', semesterResources.map(r => ({
+        title: r.title || r.name,
+        subject: r.subject,
+        type: r.type,
+        semester: r.semester
+      })));
       
       return {
         success: true,
-        data: resources
+        data: semesterResources
       };
     } catch (error) {
       console.error('Error fetching resources by semester:', error);

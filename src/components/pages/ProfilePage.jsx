@@ -152,8 +152,8 @@ const ProfilePage = () => {
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 3 } }}>
+        <Box sx={{ display: "flex", justifyContent: "center", py: { xs: 4, sm: 8 } }}>
           <CircularProgress />
         </Box>
       </Container>
@@ -162,7 +162,7 @@ const ProfilePage = () => {
 
   if (!user) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 3 } }}>
         <Alert severity="error">
           You must be logged in to view your profile.
         </Alert>
@@ -171,20 +171,26 @@ const ProfilePage = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 3 } }}>
       {/* Profile Header */}
       <Paper
         elevation={0}
         sx={{
-          p: 4,
-          mb: 4,
+          p: { xs: 2, sm: 3, md: 4 },
+          mb: { xs: 3, sm: 4 },
           background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
           borderRadius: 3,
           border: "1px solid",
           borderColor: "divider",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+        <Box sx={{ 
+          display: "flex", 
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: { xs: 'center', sm: 'center' }, 
+          gap: { xs: 2, sm: 3, md: 4 },
+          textAlign: { xs: 'center', sm: 'left' }
+        }}>
           <Badge
             overlap="circular"
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -208,9 +214,9 @@ const ProfilePage = () => {
             <Avatar
               src={user.photoURL}
               sx={{
-                width: 100,
-                height: 100,
-                fontSize: "2.5rem",
+                width: { xs: 80, sm: 100 },
+                height: { xs: 80, sm: 100 },
+                fontSize: { xs: "2rem", sm: "2.5rem" },
                 border: "4px solid white",
                 boxShadow: 3,
               }}
@@ -219,9 +225,22 @@ const ProfilePage = () => {
             </Avatar>
           </Badge>
 
-          <Box sx={{ flex: 1 }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}>
-              <Typography variant="h4" sx={{ fontWeight: 600 }}>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Box sx={{ 
+              display: "flex", 
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: { xs: 'center', sm: 'center' }, 
+              gap: { xs: 1, sm: 2 }, 
+              mb: 1 
+            }}>
+              <Typography 
+                variant="h4" 
+                sx={{ 
+                  fontWeight: 600,
+                  fontSize: { xs: '1.5rem', sm: '2.125rem' },
+                  textAlign: { xs: 'center', sm: 'left' }
+                }}
+              >
                 {user.displayName || "User"}
               </Typography>
               <Chip
@@ -233,18 +252,40 @@ const ProfilePage = () => {
               />
             </Box>
 
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+            <Box sx={{ 
+              display: "flex", 
+              alignItems: "center", 
+              justifyContent: { xs: 'center', sm: 'flex-start' },
+              gap: 1, 
+              mb: 2 
+            }}>
               <Email fontSize="small" color="action" />
-              <Typography variant="body1" color="text.secondary">
+              <Typography 
+                variant="body1" 
+                color="text.secondary"
+                sx={{ 
+                  fontSize: { xs: '0.9rem', sm: '1rem' },
+                  wordBreak: 'break-word'
+                }}
+              >
                 {user.email}
               </Typography>
             </Box>
 
-            <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+            <Box sx={{ 
+              display: "flex", 
+              gap: { xs: 2, sm: 3 }, 
+              flexWrap: "wrap",
+              justifyContent: { xs: 'center', sm: 'flex-start' }
+            }}>
               {userProfile?.createdAt && (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <CalendarToday fontSize="small" color="action" />
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography 
+                    variant="body2" 
+                    color="text.secondary"
+                    sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}
+                  >
                     Joined {userProfile.createdAt.toLocaleDateString()}
                   </Typography>
                 </Box>
@@ -252,7 +293,11 @@ const ProfilePage = () => {
 
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Timeline fontSize="small" color="action" />
-                <Typography variant="body2" color="text.secondary">
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary"
+                  sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}
+                >
                   {getDaysActive()} days active
                 </Typography>
               </Box>
@@ -262,13 +307,13 @@ const ProfilePage = () => {
       </Paper>
 
       {/* Compact Statistics Grid */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
+      <Grid container spacing={{ xs: 1, sm: 2 }} sx={{ mb: { xs: 3, sm: 4 } }}>
         {/* Community Rank - Always visible */}
         <Grid item xs={6} sm={4} md={3}>
           <Card
             elevation={1}
             sx={{
-              height: 120,
+              height: { xs: 100, sm: 120 },
               bgcolor: "white",
               borderRadius: 2,
               border: "1px solid",
@@ -277,7 +322,7 @@ const ProfilePage = () => {
           >
             <CardContent
               sx={{
-                p: 2,
+                p: { xs: 1, sm: 2 },
                 textAlign: "center",
                 height: "100%",
                 display: "flex",
@@ -286,11 +331,18 @@ const ProfilePage = () => {
                 alignItems: "center",
               }}
             >
-              <Person color="primary" sx={{ fontSize: 28, mb: 1 }} />
+              <Person 
+                color="primary" 
+                sx={{ fontSize: { xs: 20, sm: 28 }, mb: { xs: 0.5, sm: 1 } }} 
+              />
               <Typography
                 variant="h5"
                 color="primary.main"
-                sx={{ fontWeight: "bold", mb: 0.5 }}
+                sx={{ 
+                  fontWeight: "bold", 
+                  mb: 0.5,
+                  fontSize: { xs: '1.2rem', sm: '1.5rem' }
+                }}
               >
                 #
                 {totalUsers > 0
@@ -300,7 +352,10 @@ const ProfilePage = () => {
               <Typography
                 variant="caption"
                 color="text.secondary"
-                sx={{ textAlign: "center" }}
+                sx={{ 
+                  textAlign: "center",
+                  fontSize: { xs: '0.65rem', sm: '0.75rem' }
+                }}
               >
                 Community Rank
               </Typography>
@@ -313,7 +368,7 @@ const ProfilePage = () => {
           <Card
             elevation={1}
             sx={{
-              height: 120,
+              height: { xs: 100, sm: 120 },
               bgcolor: "white",
               borderRadius: 2,
               border: "1px solid",
@@ -322,7 +377,7 @@ const ProfilePage = () => {
           >
             <CardContent
               sx={{
-                p: 2,
+                p: { xs: 1, sm: 2 },
                 textAlign: "center",
                 height: "100%",
                 display: "flex",
@@ -331,18 +386,28 @@ const ProfilePage = () => {
                 alignItems: "center",
               }}
             >
-              <Timeline color="primary" sx={{ fontSize: 28, mb: 1 }} />
+              <Timeline 
+                color="primary" 
+                sx={{ fontSize: { xs: 20, sm: 28 }, mb: { xs: 0.5, sm: 1 } }} 
+              />
               <Typography
                 variant="h5"
                 color="primary.main"
-                sx={{ fontWeight: "bold", mb: 0.5 }}
+                sx={{ 
+                  fontWeight: "bold", 
+                  mb: 0.5,
+                  fontSize: { xs: '1.2rem', sm: '1.5rem' }
+                }}
               >
                 {getDaysActive()}
               </Typography>
               <Typography
                 variant="caption"
                 color="text.secondary"
-                sx={{ textAlign: "center" }}
+                sx={{ 
+                  textAlign: "center",
+                  fontSize: { xs: '0.65rem', sm: '0.75rem' }
+                }}
               >
                 Days Active
               </Typography>
@@ -358,7 +423,7 @@ const ProfilePage = () => {
               <Card
                 elevation={1}
                 sx={{
-                  height: 120,
+                  height: { xs: 100, sm: 120 },
                   bgcolor: "white",
                   borderRadius: 2,
                   border: "1px solid",
@@ -367,7 +432,7 @@ const ProfilePage = () => {
               >
                 <CardContent
                   sx={{
-                    p: 2,
+                    p: { xs: 1, sm: 2 },
                     textAlign: "center",
                     height: "100%",
                     display: "flex",
@@ -376,18 +441,28 @@ const ProfilePage = () => {
                     alignItems: "center",
                   }}
                 >
-                  <School color="primary" sx={{ fontSize: 28, mb: 1 }} />
+                  <School 
+                    color="primary" 
+                    sx={{ fontSize: { xs: 20, sm: 28 }, mb: { xs: 0.5, sm: 1 } }} 
+                  />
                   <Typography
                     variant="h5"
                     color="primary.main"
-                    sx={{ fontWeight: "bold", mb: 0.5 }}
+                    sx={{ 
+                      fontWeight: "bold", 
+                      mb: 0.5,
+                      fontSize: { xs: '1.2rem', sm: '1.5rem' }
+                    }}
                   >
                     {userStats?.totalResources || 0}
                   </Typography>
                   <Typography
                     variant="caption"
                     color="text.secondary"
-                    sx={{ textAlign: "center" }}
+                    sx={{ 
+                      textAlign: "center",
+                      fontSize: { xs: '0.65rem', sm: '0.75rem' }
+                    }}
                   >
                     Resources Shared
                   </Typography>
@@ -401,7 +476,7 @@ const ProfilePage = () => {
                 <Card
                   elevation={1}
                   sx={{
-                    height: 120,
+                    height: { xs: 100, sm: 120 },
                     bgcolor: "white",
                     borderRadius: 2,
                     border: "1px solid",
@@ -410,7 +485,7 @@ const ProfilePage = () => {
                 >
                   <CardContent
                     sx={{
-                      p: 2,
+                      p: { xs: 1, sm: 2 },
                       textAlign: "center",
                       height: "100%",
                       display: "flex",
@@ -419,18 +494,28 @@ const ProfilePage = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Star color="primary" sx={{ fontSize: 28, mb: 1 }} />
+                    <Star 
+                      color="primary" 
+                      sx={{ fontSize: { xs: 20, sm: 28 }, mb: { xs: 0.5, sm: 1 } }} 
+                    />
                     <Typography
                       variant="h5"
                       color="primary.main"
-                      sx={{ fontWeight: "bold", mb: 0.5 }}
+                      sx={{ 
+                        fontWeight: "bold", 
+                        mb: 0.5,
+                        fontSize: { xs: '1.2rem', sm: '1.5rem' }
+                      }}
                     >
                       {userProfile?.rating?.toFixed(1) || "0.0"}
                     </Typography>
                     <Typography
                       variant="caption"
                       color="text.secondary"
-                      sx={{ textAlign: "center" }}
+                      sx={{ 
+                        textAlign: "center",
+                        fontSize: { xs: '0.65rem', sm: '0.75rem' }
+                      }}
                     >
                       Rating ({userProfile?.totalRatings || 0})
                     </Typography>
@@ -445,7 +530,7 @@ const ProfilePage = () => {
             <Card
               elevation={1}
               sx={{
-                height: 120,
+                height: { xs: 100, sm: 120 },
                 bgcolor: "white",
                 borderRadius: 2,
                 border: "1px solid",
@@ -454,7 +539,7 @@ const ProfilePage = () => {
             >
               <CardContent
                 sx={{
-                  p: 2,
+                  p: { xs: 1, sm: 2 },
                   textAlign: "center",
                   height: "100%",
                   display: "flex",
@@ -463,18 +548,28 @@ const ProfilePage = () => {
                   alignItems: "center",
                 }}
               >
-                <School color="primary" sx={{ fontSize: 28, mb: 1 }} />
+                <School 
+                  color="primary" 
+                  sx={{ fontSize: { xs: 20, sm: 28 }, mb: { xs: 0.5, sm: 1 } }} 
+                />
                 <Typography
                   variant="h5"
                   color="primary.main"
-                  sx={{ fontWeight: "bold", mb: 0.5 }}
+                  sx={{ 
+                    fontWeight: "bold", 
+                    mb: 0.5,
+                    fontSize: { xs: '1.2rem', sm: '1.5rem' }
+                  }}
                 >
                   {Math.min(getDaysActive(), 30)}
                 </Typography>
                 <Typography
                   variant="caption"
                   color="text.secondary"
-                  sx={{ textAlign: "center" }}
+                  sx={{ 
+                    textAlign: "center",
+                    fontSize: { xs: '0.65rem', sm: '0.75rem' }
+                  }}
                 >
                   Learning Days
                 </Typography>
@@ -488,7 +583,7 @@ const ProfilePage = () => {
           <Card
             elevation={1}
             sx={{
-              height: 120,
+              height: { xs: 100, sm: 120 },
               bgcolor: "white",
               borderRadius: 2,
               border: "1px solid",
@@ -497,7 +592,7 @@ const ProfilePage = () => {
           >
             <CardContent
               sx={{
-                p: 2,
+                p: { xs: 1, sm: 2 },
                 textAlign: "center",
                 height: "100%",
                 display: "flex",
@@ -506,18 +601,28 @@ const ProfilePage = () => {
                 alignItems: "center",
               }}
             >
-              <Person color="primary" sx={{ fontSize: 28, mb: 1 }} />
+              <Person 
+                color="primary" 
+                sx={{ fontSize: { xs: 20, sm: 28 }, mb: { xs: 0.5, sm: 1 } }} 
+              />
               <Typography
                 variant="h5"
                 color="primary.main"
-                sx={{ fontWeight: "bold", mb: 0.5 }}
+                sx={{ 
+                  fontWeight: "bold", 
+                  mb: 0.5,
+                  fontSize: { xs: '1.2rem', sm: '1.5rem' }
+                }}
               >
                 {totalUsers}
               </Typography>
               <Typography
                 variant="caption"
                 color="text.secondary"
-                sx={{ textAlign: "center" }}
+                sx={{ 
+                  textAlign: "center",
+                  fontSize: { xs: '0.65rem', sm: '0.75rem' }
+                }}
               >
                 Total Members
               </Typography>
@@ -532,18 +637,25 @@ const ProfilePage = () => {
           <Paper
             elevation={0}
             sx={{
-              p: 3,
-              mb: 4,
+              p: { xs: 2, sm: 3 },
+              mb: { xs: 3, sm: 4 },
               borderRadius: 3,
               border: "1px solid",
               borderColor: "divider",
             }}
           >
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+            <Typography 
+              variant="h6" 
+              gutterBottom 
+              sx={{ 
+                fontWeight: 600,
+                fontSize: { xs: '1.1rem', sm: '1.25rem' }
+              }}
+            >
               Specialties
             </Typography>
             <Divider sx={{ mb: 2 }} />
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: { xs: 0.5, sm: 1 } }}>
               {userProfile.specialties.map((specialty, index) => (
                 <Chip
                   key={index}
@@ -564,27 +676,54 @@ const ProfilePage = () => {
           <Paper
             elevation={0}
             sx={{
-              p: 3,
-              mb: 4,
+              p: { xs: 2, sm: 3 },
+              mb: { xs: 3, sm: 4 },
               borderRadius: 3,
               border: "1px solid",
               borderColor: "divider",
             }}
           >
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+            <Typography 
+              variant="h6" 
+              gutterBottom 
+              sx={{ 
+                fontWeight: 600,
+                fontSize: { xs: '1.1rem', sm: '1.25rem' }
+              }}
+            >
               Resource Contributions
             </Typography>
             <Divider sx={{ mb: 3 }} />
-            <Grid container spacing={2}>
+            <Grid container spacing={{ xs: 1, sm: 2 }}>
               {Object.entries(userStats.resourcesByType).map(
                 ([type, count]) => (
                   <Grid item xs={6} sm={4} md={3} key={type}>
-                    <Card variant="outlined" sx={{ textAlign: "center", p: 2 }}>
-                      {getResourceIcon(type)}
-                      <Typography variant="h6" sx={{ mt: 1, fontWeight: 600 }}>
+                    <Card 
+                      variant="outlined" 
+                      sx={{ 
+                        textAlign: "center", 
+                        p: { xs: 1.5, sm: 2 },
+                        minHeight: { xs: 80, sm: 100 }
+                      }}
+                    >
+                      <Box sx={{ '& svg': { fontSize: { xs: '1.2rem', sm: '1.5rem' } } }}>
+                        {getResourceIcon(type)}
+                      </Box>
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          mt: 1, 
+                          fontWeight: 600,
+                          fontSize: { xs: '1rem', sm: '1.25rem' }
+                        }}
+                      >
                         {count}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary">
+                      <Typography 
+                        variant="caption" 
+                        color="text.secondary"
+                        sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}
+                      >
                         {type}
                       </Typography>
                     </Card>
@@ -600,21 +739,31 @@ const ProfilePage = () => {
         <Paper
           elevation={0}
           sx={{
-            p: 3,
-            mb: 4,
+            p: { xs: 2, sm: 3 },
+            mb: { xs: 3, sm: 4 },
             borderRadius: 3,
             border: "1px solid",
             borderColor: "divider",
           }}
         >
-          <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+          <Typography 
+            variant="h6" 
+            gutterBottom 
+            sx={{ 
+              fontWeight: 600,
+              fontSize: { xs: '1.1rem', sm: '1.25rem' }
+            }}
+          >
             About Me
           </Typography>
           <Divider sx={{ mb: 2 }} />
           <Typography
             variant="body1"
             color="text.secondary"
-            sx={{ lineHeight: 1.7 }}
+            sx={{ 
+              lineHeight: 1.7,
+              fontSize: { xs: '0.9rem', sm: '1rem' }
+            }}
           >
             {userProfile.bio}
           </Typography>
@@ -626,19 +775,26 @@ const ProfilePage = () => {
         <Paper
           elevation={0}
           sx={{
-            p: 3,
+            p: { xs: 2, sm: 3 },
             borderRadius: 3,
             border: "1px solid",
             borderColor: "divider",
           }}
         >
-          <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+          <Typography 
+            variant="h6" 
+            gutterBottom 
+            sx={{ 
+              fontWeight: 600,
+              fontSize: { xs: '1.1rem', sm: '1.25rem' }
+            }}
+          >
             Recent Contributions
           </Typography>
           <Divider sx={{ mb: 3 }} />
 
           {userResources.length > 0 ? (
-            <Grid container spacing={2}>
+            <Grid container spacing={{ xs: 1, sm: 2 }}>
               {userResources.slice(0, 6).map((resource) => (
                 <Grid item xs={12} sm={6} md={4} key={resource.id}>
                   <Card
@@ -652,7 +808,7 @@ const ProfilePage = () => {
                       },
                     }}
                   >
-                    <CardContent sx={{ p: 2 }}>
+                    <CardContent sx={{ p: { xs: 1.5, sm: 2 } }}>
                       <Box
                         sx={{
                           display: "flex",
@@ -661,11 +817,16 @@ const ProfilePage = () => {
                           mb: 1,
                         }}
                       >
-                        {getResourceIcon(resource.type)}
+                        <Box sx={{ '& svg': { fontSize: { xs: '1rem', sm: '1.2rem' } } }}>
+                          {getResourceIcon(resource.type)}
+                        </Box>
                         <Typography
                           variant="subtitle2"
                           noWrap
-                          sx={{ fontWeight: 500 }}
+                          sx={{ 
+                            fontWeight: 500,
+                            fontSize: { xs: '0.8rem', sm: '0.875rem' }
+                          }}
                         >
                           {resource.name}
                         </Typography>
@@ -673,7 +834,10 @@ const ProfilePage = () => {
                       <Typography
                         variant="body2"
                         color="text.secondary"
-                        sx={{ mb: 1 }}
+                        sx={{ 
+                          mb: 1,
+                          fontSize: { xs: '0.75rem', sm: '0.875rem' }
+                        }}
                       >
                         {resource.subject} • Semester {resource.semester}
                       </Typography>
@@ -682,6 +846,7 @@ const ProfilePage = () => {
                         size="small"
                         variant="outlined"
                         color="primary"
+                        sx={{ fontSize: { xs: '0.65rem', sm: '0.75rem' } }}
                       />
                     </CardContent>
                   </Card>

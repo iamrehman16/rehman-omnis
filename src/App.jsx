@@ -23,13 +23,26 @@ function AuthPage() {
 }
 
 function App() {
-  const [showLanding, setShowLanding] = useState(true);
+  // Check if user has visited before or is already authenticated
+  const [showLanding, setShowLanding] = useState(() => {
+    const hasVisited = localStorage.getItem('omnis-has-visited');
+    const hasAuthToken = localStorage.getItem('omnis-auth-token') || sessionStorage.getItem('omnis-auth-token');
+    
+    // If user has visited before or has auth token, skip landing page
+    return !hasVisited && !hasAuthToken;
+  });
+
+  const handleGetStarted = () => {
+    // Mark that user has visited the app
+    localStorage.setItem('omnis-has-visited', 'true');
+    setShowLanding(false);
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {showLanding ? (
-        <LandingPage onGetStarted={() => setShowLanding(false)} />
+        <LandingPage onGetStarted={handleGetStarted} />
       ) : (
         <AuthProvider>
           <ChatProvider>

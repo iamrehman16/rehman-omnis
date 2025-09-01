@@ -25,7 +25,8 @@ const AddResourceModal = ({ open, onClose, onSubmit }) => {
     type: '',
     resourceUrl: '',
     subject: '',
-    semester: ''
+    semester: '',
+    summary: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -55,6 +56,7 @@ const AddResourceModal = ({ open, onClose, onSubmit }) => {
     if (!formData.resourceUrl.trim()) newErrors.resourceUrl = 'Resource URL is required';
     if (!formData.subject) newErrors.subject = 'Subject is required';
     if (!formData.semester) newErrors.semester = 'Semester is required';
+    if (!formData.summary.trim()) newErrors.summary = 'Summary is required for AI context';
     
     // Validate URL format (basic check for Google Drive)
     if (formData.resourceUrl && !formData.resourceUrl.includes('drive.google.com')) {
@@ -90,7 +92,8 @@ const AddResourceModal = ({ open, onClose, onSubmit }) => {
       type: '',
       resourceUrl: '',
       subject: '',
-      semester: ''
+      semester: '',
+      summary: ''
     });
     setErrors({});
     onClose();
@@ -128,6 +131,20 @@ const AddResourceModal = ({ open, onClose, onSubmit }) => {
             helperText={errors.description}
             multiline
             rows={3}
+            required
+          />
+
+          <TextField
+            fullWidth
+            label="Summary for AI Assistant"
+            name="summary"
+            value={formData.summary}
+            onChange={handleInputChange}
+            error={!!errors.summary}
+            helperText={errors.summary || 'Describe the content, topics covered, and keywords. This helps the AI assistant recommend this resource accurately.'}
+            multiline
+            rows={4}
+            placeholder="e.g., Covers virtual memory, page tables, page replacement algorithms (FIFO, LRU, Optimal), demand paging, thrashing. Includes examples and practice problems."
             required
           />
           

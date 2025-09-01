@@ -131,7 +131,7 @@ const ResourceCard = ({ resource, currentUser, onEdit, onDelete }) => {
   return (
     <Card 
       sx={{ 
-        height: '100%', 
+        height: '280px', // Fixed height for consistency
         display: 'flex', 
         flexDirection: 'column',
         transition: 'transform 0.2s, box-shadow 0.2s',
@@ -177,9 +177,11 @@ const ResourceCard = ({ resource, currentUser, onEdit, onDelete }) => {
           sx={{ 
             mb: 2, 
             display: '-webkit-box',
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 3, // Allow 3 lines for better content display
             WebkitBoxOrient: 'vertical',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            minHeight: '3.6em', // Reserve space for 3 lines
+            lineHeight: 1.2
           }}
         >
           {resource.description}
