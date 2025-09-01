@@ -376,13 +376,16 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
       onClose={onClose}
       maxWidth="sm"
       fullWidth
+      fullScreen={{ xs: true, sm: false }}
       slotProps={{
         paper: {
           sx: {
-            height: '80vh',
-            maxHeight: '600px',
+            height: { xs: '100vh', sm: '80vh' },
+            maxHeight: { xs: '100vh', sm: '600px' },
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            m: { xs: 0, sm: 2 },
+            borderRadius: { xs: 0, sm: 1 }
           }
         }
       }}
@@ -392,8 +395,10 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
         sx={{
           display: 'flex',
           alignItems: 'center',
-          gap: 2,
+          gap: { xs: 1.5, sm: 2 },
           pb: 1,
+          px: { xs: 2, sm: 3 },
+          py: { xs: 1.5, sm: 2 },
           borderBottom: 1,
           borderColor: 'divider'
         }}
@@ -401,24 +406,31 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
         <Avatar
           src={contributor.avatar || contributor.photoURL}
           alt={contributor.name || contributor.displayName}
-          sx={{ width: 40, height: 40 }}
+          sx={{ width: { xs: 36, sm: 40 }, height: { xs: 36, sm: 40 } }}
         >
           {(contributor.name || contributor.displayName)?.charAt(0)}
         </Avatar>
         
         <Box sx={{ flex: 1 }}>
-          <Typography variant="h6" component="div">
+          <Typography 
+            variant="h6" 
+            component="div"
+            sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+          >
             {contributor.name || contributor.displayName}
           </Typography>
           {contributor.specialties && contributor.specialties.length > 0 && (
             <Box sx={{ display: 'flex', gap: 0.5, mt: 0.5, flexWrap: 'wrap' }}>
-              {contributor.specialties.slice(0, 3).map((specialty, index) => (
+              {contributor.specialties.slice(0, { xs: 2, sm: 3 }).map((specialty, index) => (
                 <Chip
                   key={index}
                   label={specialty}
                   size="small"
                   variant="outlined"
-                  sx={{ fontSize: '0.75rem', height: 20 }}
+                  sx={{ 
+                    fontSize: { xs: '0.7rem', sm: '0.75rem' }, 
+                    height: { xs: 18, sm: 20 }
+                  }}
                 />
               ))}
             </Box>
@@ -426,7 +438,7 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
         </Box>
         
         <IconButton onClick={onClose} size="small">
-          <CloseIcon />
+          <CloseIcon sx={{ fontSize: { xs: 20, sm: 24 } }} />
         </IconButton>
       </DialogTitle>
 
@@ -451,7 +463,7 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
           sx={{
             flex: 1,
             overflowY: 'auto',
-            p: 2,
+            p: { xs: 1.5, sm: 2 },
             display: 'flex',
             flexDirection: 'column',
             gap: 1
@@ -501,14 +513,21 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
                   <Paper
                     elevation={1}
                     sx={{
-                      p: 1.5,
-                      maxWidth: '70%',
+                      p: { xs: 1, sm: 1.5 },
+                      maxWidth: { xs: '85%', sm: '70%' },
                       backgroundColor: message.isOwn ? 'primary.main' : 'grey.100',
-                      color: message.isOwn ? 'primary.contrastText' : 'text.primary'
+                      color: message.isOwn ? 'primary.contrastText' : 'text.primary',
+                      borderRadius: 2
                     }}
                   >
 
-                    <Typography variant="body2" sx={{ mb: 0.5 }}>
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        mb: 0.5,
+                        fontSize: { xs: '0.85rem', sm: '0.875rem' }
+                      }}
+                    >
                       {message.message}
                     </Typography>
                     <Box
@@ -523,7 +542,7 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
                         variant="caption"
                         sx={{
                           opacity: 0.7,
-                          fontSize: '0.7rem'
+                          fontSize: { xs: '0.65rem', sm: '0.7rem' }
                         }}
                       >
                         {message.timestamp ? formatTimestamp(message.timestamp) : 'Sending...'}
@@ -558,7 +577,7 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
       {/* Message input area */}
       <DialogActions
         sx={{
-          p: 2,
+          p: { xs: 1.5, sm: 2 },
           gap: 1,
           alignItems: 'flex-end'
         }}
@@ -576,7 +595,11 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
           disabled={loading || sending}
           sx={{
             '& .MuiOutlinedInput-root': {
-              borderRadius: 2
+              borderRadius: 2,
+              fontSize: { xs: '0.85rem', sm: '0.875rem' }
+            },
+            '& .MuiInputBase-input': {
+              py: { xs: 1, sm: 1.5 }
             }
           }}
         />
@@ -587,6 +610,8 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
           sx={{
             backgroundColor: 'primary.main',
             color: 'white',
+            width: { xs: 36, sm: 40 },
+            height: { xs: 36, sm: 40 },
             '&:hover': {
               backgroundColor: 'primary.dark'
             },
@@ -596,7 +621,11 @@ const ChatModal = ({ open, onClose, contributor, conversationId = null }) => {
             }
           }}
         >
-          {sending ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
+          {sending ? (
+            <CircularProgress size={16} color="inherit" />
+          ) : (
+            <SendIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />
+          )}
         </IconButton>
       </DialogActions>
     </Dialog>

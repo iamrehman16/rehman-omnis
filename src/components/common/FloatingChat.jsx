@@ -265,11 +265,13 @@ const FloatingChat = () => {
     <>
       {/* Floating Chat Interface */}
       <Box
+      id="simple-chat"
+      className={isExpanded ? 'open' : ''}
         sx={{
           position: "fixed",
-          bottom: 24,
-          right: 24,
-          zIndex: 1000,
+          bottom: { xs: 16, sm: 24 },
+          right: { xs: 8, sm: 24 },
+          zIndex: 999, // Lower z-index than ChatbotFloating
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-end",
@@ -281,19 +283,24 @@ const FloatingChat = () => {
           <Paper
             elevation={8}
             sx={{
-              width: 350,
-              height: 500,
+              width: { xs: 'calc(100vw - 16px)', sm: 350 },
+              height: { xs: 'calc(100vh - 100px)', sm: 500 },
+              maxWidth: { xs: '100vw', sm: '350px' },
+              maxHeight: { xs: 'calc(100vh - 100px)', sm: '500px' },
               mb: 1,
-              borderRadius: 2,
+              borderRadius: { xs: 1, sm: 2 },
               overflow: "hidden",
               display: "flex",
               flexDirection: "column",
+              // Ensure it stays within viewport on mobile
+              left: { xs: 8, sm: 'auto' },
+              right: { xs: 8, sm: 'auto' },
             }}
           >
             {/* Header */}
             <Box
               sx={{
-                p: 2,
+                p: { xs: 1.5, sm: 2 },
                 bgcolor: "primary.main",
                 color: "white",
                 display: "flex",
@@ -321,18 +328,24 @@ const FloatingChat = () => {
                     <Avatar
                       src={selectedUser?.photoURL}
                       alt={selectedUser?.displayName}
-                      sx={{ width: 32, height: 32 }}
+                      sx={{ width: { xs: 28, sm: 32 }, height: { xs: 28, sm: 32 } }}
                     >
                       {selectedUser?.displayName?.charAt(0)?.toUpperCase() ||
                         "U"}
                     </Avatar>
-                    <Typography variant="subtitle1" sx={{ fontSize: "0.9rem" }}>
+                    <Typography 
+                      variant="subtitle1" 
+                      sx={{ fontSize: { xs: "0.85rem", sm: "0.9rem" } }}
+                    >
                       {selectedUser?.displayName}
                     </Typography>
                   </Box>
                 </>
               ) : (
-                <Typography variant="h6" sx={{ fontSize: "1rem" }}>
+                <Typography 
+                  variant="h6" 
+                  sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}
+                >
                   Messages
                 </Typography>
               )}
@@ -362,7 +375,7 @@ const FloatingChat = () => {
                     sx={{
                       flex: 1,
                       overflowY: "auto",
-                      p: 1,
+                      p: { xs: 0.75, sm: 1 },
                       display: "flex",
                       flexDirection: "column",
                       gap: 0.5,
@@ -402,8 +415,8 @@ const FloatingChat = () => {
                             <Paper
                               elevation={1}
                               sx={{
-                                p: 1,
-                                maxWidth: "75%",
+                                p: { xs: 0.75, sm: 1 },
+                                maxWidth: { xs: "85%", sm: "75%" },
                                 backgroundColor: message.isOwn
                                   ? "primary.main"
                                   : "grey.100",
@@ -415,7 +428,10 @@ const FloatingChat = () => {
                             >
                               <Typography
                                 variant="body2"
-                                sx={{ fontSize: "0.85rem", mb: 0.5 }}
+                                sx={{ 
+                                  fontSize: { xs: "0.8rem", sm: "0.85rem" }, 
+                                  mb: 0.5 
+                                }}
                               >
                                 {message.message}
                               </Typography>
@@ -431,7 +447,7 @@ const FloatingChat = () => {
                                   variant="caption"
                                   sx={{
                                     opacity: 0.7,
-                                    fontSize: "0.65rem",
+                                    fontSize: { xs: "0.6rem", sm: "0.65rem" },
                                   }}
                                 >
                                   {message.timestamp
@@ -463,7 +479,7 @@ const FloatingChat = () => {
                   {/* Message Input */}
                   <Box
                     sx={{
-                      p: 1,
+                      p: { xs: 0.75, sm: 1 },
                       borderTop: 1,
                       borderColor: "divider",
                       display: "flex",
@@ -485,8 +501,11 @@ const FloatingChat = () => {
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           borderRadius: 2,
-                          fontSize: "0.85rem",
+                          fontSize: { xs: "0.8rem", sm: "0.85rem" },
                         },
+                        "& .MuiInputBase-input": {
+                          py: { xs: 0.75, sm: 1 }
+                        }
                       }}
                     />
                     <IconButton
@@ -497,6 +516,8 @@ const FloatingChat = () => {
                       sx={{
                         backgroundColor: "primary.main",
                         color: "white",
+                        width: { xs: 32, sm: 36 },
+                        height: { xs: 32, sm: 36 },
                         "&:hover": {
                           backgroundColor: "primary.dark",
                         },
@@ -507,9 +528,9 @@ const FloatingChat = () => {
                       }}
                     >
                       {sending ? (
-                        <CircularProgress size={16} color="inherit" />
+                        <CircularProgress size={14} color="inherit" />
                       ) : (
-                        <SendIcon fontSize="small" />
+                        <SendIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
                       )}
                     </IconButton>
                   </Box>
@@ -545,7 +566,7 @@ const FloatingChat = () => {
                                 onClick={() =>
                                   handleConversationSelect(conversation)
                                 }
-                                sx={{ py: 1.5 }}
+                                sx={{ py: { xs: 1, sm: 1.5 } }}
                               >
                                 <ListItemAvatar>
                                   <Badge
@@ -557,7 +578,10 @@ const FloatingChat = () => {
                                     <Avatar
                                       src={userProfile.photoURL}
                                       alt={userProfile.displayName}
-                                      sx={{ width: 40, height: 40 }}
+                                      sx={{ 
+                                        width: { xs: 36, sm: 40 }, 
+                                        height: { xs: 36, sm: 40 } 
+                                      }}
                                     >
                                       {userProfile.displayName
                                         ?.charAt(0)
@@ -581,6 +605,7 @@ const FloatingChat = () => {
                                           fontWeight:
                                             unreadCount > 0 ? "bold" : "normal",
                                           flex: 1,
+                                          fontSize: { xs: "0.85rem", sm: "0.875rem" }
                                         }}
                                       >
                                         {userProfile.displayName}
@@ -589,6 +614,7 @@ const FloatingChat = () => {
                                         <Typography
                                           variant="caption"
                                           color="text.secondary"
+                                          sx={{ fontSize: { xs: "0.7rem", sm: "0.75rem" } }}
                                         >
                                           {formatTimestamp(
                                             conversation.lastMessageTime
@@ -606,8 +632,8 @@ const FloatingChat = () => {
                                           color="primary"
                                           variant="outlined"
                                           sx={{
-                                            height: 16,
-                                            fontSize: "0.7rem",
+                                            height: { xs: 14, sm: 16 },
+                                            fontSize: { xs: "0.65rem", sm: "0.7rem" },
                                           }}
                                         />
                                       ) : (
@@ -619,11 +645,12 @@ const FloatingChat = () => {
                                               unreadCount > 0
                                                 ? "medium"
                                                 : "normal",
-                                            fontSize: "0.8rem",
+                                            fontSize: { xs: "0.75rem", sm: "0.8rem" },
                                           }}
                                         >
                                           {truncateMessage(
-                                            conversation.lastMessage
+                                            conversation.lastMessage,
+                                            25
                                           )}
                                         </Typography>
                                       )}
@@ -656,15 +683,19 @@ const FloatingChat = () => {
               color="primary"
               onClick={() => setIsExpanded(!isExpanded)}
               sx={{
-                width: 56,
-                height: 56,
+                width: { xs: 48, sm: 56 },
+                height: { xs: 48, sm: 56 },
                 boxShadow: 3,
                 "&:hover": {
                   boxShadow: 6,
                 },
               }}
             >
-              {isExpanded ? <ExpandMore /> : <ChatIcon />}
+              {isExpanded ? (
+                <ExpandMore sx={{ fontSize: { xs: 20, sm: 24 } }} />
+              ) : (
+                <ChatIcon sx={{ fontSize: { xs: 20, sm: 24 } }} />
+              )}
             </Fab>
           </Badge>
         </Tooltip>

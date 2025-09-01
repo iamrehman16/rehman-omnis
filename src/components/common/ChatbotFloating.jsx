@@ -51,6 +51,23 @@ const ChatbotFloating = () => {
     { value: 'semester-8', label: 'Semester 8' },
   ];
 
+  useEffect(() => {
+    const checkSimpleChat = () => {
+      const simpleChat = document.getElementById('simple-chat');
+      const fab = document.getElementById('ai-fab');
+      if (simpleChat?.classList.contains('open')) {
+        fab.style.display = 'none';
+      } else {
+        fab.style.display = 'flex';
+      }
+    };
+  
+    checkSimpleChat(); // initial check
+    window.addEventListener('click', checkSimpleChat); // run on interactions
+  
+    return () => window.removeEventListener('click', checkSimpleChat);
+  }, []);
+
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -170,9 +187,9 @@ const ChatbotFloating = () => {
     <Box
       sx={{
         position: 'fixed',
-        bottom: 96, // Position above the existing chat button (24px + 56px FAB + 16px gap)
-        right: 24,
-        zIndex: 1000,
+        bottom: { xs: 80, sm: 96 }, // Position above the existing chat button
+        right: { xs: 8, sm: 24 },
+        zIndex: 1001, // Higher z-index than FloatingChat
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-end',
@@ -181,22 +198,36 @@ const ChatbotFloating = () => {
     >
       {/* Chat Interface */}
       <Collapse in={isExpanded}>
-        <Paper
-          elevation={8}
-          sx={{
-            width: 350,
-            height: 500,
-            mb: 1,
-            borderRadius: 2,
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+      <Paper
+            elevation={8}
+            sx={{
+              zIndex:3400,
+              width: { xs: '100%', sm: 350 },
+              height: { xs: '90vh', sm: 500 },
+              maxWidth: { xs: '100%', sm: '350px' },
+              maxHeight: { xs: '90vh', sm: '500px' },
+              mb: 1,
+              borderRadius: { xs: 1, sm: 2 },
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+              boxSizing: 'border-box',
+              // Mobile positioning to prevent overflow
+              ...(isExpanded && {
+                position: { xs: 'fixed', sm: 'relative' },
+                top: { xs: 0, sm: 'auto' },
+                left: { xs: 0, sm: 'auto' },
+                right: { xs: 0, sm: 'auto' },
+                bottom: { xs: 0, sm: 'auto' },
+                m: { xs: 1, sm: 0 }, // small margin on mobile
+              }),
+            }}
+          >
+
           {/* Header */}
           <Box
             sx={{
-              p: 2,
+              p: { xs: 1.5, sm: 2 },
               background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
               color: 'white',
               display: 'flex',
@@ -205,8 +236,11 @@ const ChatbotFloating = () => {
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <BotIcon />
-              <Typography variant="h6" sx={{ fontSize: '1rem' }}>
+              <BotIcon sx={{ fontSize: { xs: 20, sm: 24 } }} />
+              <Typography 
+                variant="h6" 
+                sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+              >
                 AI Assistant
               </Typography>
             </Box>
@@ -220,16 +254,28 @@ const ChatbotFloating = () => {
           </Box>
 
           {/* Context Selection */}
-          <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+          <Box sx={{ p: { xs: 1.5, sm: 2 }, borderBottom: 1, borderColor: 'divider' }}>
             <FormControl fullWidth size="small">
-              <InputLabel>Context</InputLabel>
+              <InputLabel sx={{ fontSize: { xs: '0.85rem', sm: '0.875rem' } }}>
+                Context
+              </InputLabel>
               <Select
                 value={selectedContext}
                 onChange={handleContextChange}
                 label="Context"
+                sx={{
+                  fontSize: { xs: '0.85rem', sm: '0.875rem' },
+                  '& .MuiSelect-select': {
+                    py: { xs: 1, sm: 1.5 }
+                  }
+                }}
               >
                 {contexts.map((context) => (
-                  <MenuItem key={context.value} value={context.value}>
+                  <MenuItem 
+                    key={context.value} 
+                    value={context.value}
+                    sx={{ fontSize: { xs: '0.85rem', sm: '0.875rem' } }}
+                  >
                     {context.label}
                   </MenuItem>
                 ))}
@@ -242,7 +288,7 @@ const ChatbotFloating = () => {
             sx={{
               flex: 1,
               overflowY: 'auto',
-              p: 2,
+              p: { xs: 1.5, sm: 2 },
               display: 'flex',
               flexDirection: 'column',
               gap: 1,
@@ -267,13 +313,16 @@ const ChatbotFloating = () => {
                 <Paper
                   elevation={1}
                   sx={{
-                    p: 1.5,
-                    maxWidth: '85%',
+                    p: { xs: 1, sm: 1.5 },
+                    maxWidth: { xs: '90%', sm: '85%' },
                     backgroundColor: 'grey.100',
                     borderRadius: 2,
                   }}
                 >
-                  <Typography variant="body2" sx={{ fontSize: '0.85rem' }}>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ fontSize: { xs: '0.8rem', sm: '0.85rem' } }}
+                  >
                     Hi! I'm your AI assistant. I can help you with questions about your courses and academic information. 
                     {selectedContext !== 'general' && (
                       <span> Currently focused on <strong>{contexts.find(c => c.value === selectedContext)?.label}</strong>.</span>
@@ -296,8 +345,8 @@ const ChatbotFloating = () => {
                 <Paper
                   elevation={1}
                   sx={{
-                    p: 1.5,
-                    maxWidth: '85%',
+                    p: { xs: 1, sm: 1.5 },
+                    maxWidth: { xs: '90%', sm: '85%' },
                     background: msg.isUser ? 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)' : 'grey.100',
                     color: msg.isUser ? 'white' : 'text.primary',
                     borderRadius: 2,
@@ -305,11 +354,19 @@ const ChatbotFloating = () => {
                   }}
                 >
                   {msg.isUser ? (
-                    <Typography variant="body2" sx={{ fontSize: '0.85rem', mb: 0.5 }}>
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        fontSize: { xs: '0.8rem', sm: '0.85rem' }, 
+                        mb: 0.5 
+                      }}
+                    >
                       {msg.text}
                     </Typography>
                   ) : (
-                    <MessageWithHighlights text={msg.text} />
+                    <Box sx={{ '& .MuiTypography-root': { fontSize: { xs: '0.8rem', sm: '0.85rem' } } }}>
+                      <MessageWithHighlights text={msg.text} />
+                    </Box>
                   )}
                   <Box
                     sx={{
@@ -323,7 +380,7 @@ const ChatbotFloating = () => {
                       variant="caption"
                       sx={{
                         opacity: 0.7,
-                        fontSize: '0.7rem',
+                        fontSize: { xs: '0.65rem', sm: '0.7rem' },
                       }}
                     >
                       {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -341,10 +398,10 @@ const ChatbotFloating = () => {
                               opacity: 1,
                               backgroundColor: 'rgba(0, 0, 0, 0.04)',
                             },
-                            p: 0.5,
+                            p: { xs: 0.25, sm: 0.5 },
                           }}
                         >
-                          <CopyIcon sx={{ fontSize: '0.8rem' }} />
+                          <CopyIcon sx={{ fontSize: { xs: '0.7rem', sm: '0.8rem' } }} />
                         </IconButton>
                       </Tooltip>
                     )}
@@ -407,7 +464,7 @@ const ChatbotFloating = () => {
           {/* Message Input */}
           <Box
             sx={{
-              p: 2,
+              p: { xs: 1.5, sm: 2 },
               display: 'flex',
               gap: 1,
               alignItems: 'flex-end',
@@ -426,8 +483,11 @@ const ChatbotFloating = () => {
               sx={{
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 2,
-                  fontSize: '0.85rem',
+                  fontSize: { xs: '0.8rem', sm: '0.85rem' },
                 },
+                '& .MuiInputBase-input': {
+                  py: { xs: 1, sm: 1.5 }
+                }
               }}
             />
             <IconButton
@@ -437,6 +497,8 @@ const ChatbotFloating = () => {
               sx={{
                 background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
                 color: 'white',
+                width: { xs: 36, sm: 40 },
+                height: { xs: 36, sm: 40 },
                 '&:hover': {
                   background: 'linear-gradient(135deg, #1565c0 0%, #1e88e5 100%)',
                 },
@@ -460,10 +522,11 @@ const ChatbotFloating = () => {
       {/* Floating Action Button */}
       <Tooltip title={isExpanded ? 'Close AI Assistant' : 'Open AI Assistant'}>
         <Fab
+         id="ai-fab"
           onClick={() => setIsExpanded(!isExpanded)}
           sx={{
-            width: 56,
-            height: 56,
+            width: { xs: 48, sm: 56 },
+            height: { xs: 48, sm: 56 },
             background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
             color: 'white',
             boxShadow: 3,
@@ -473,7 +536,11 @@ const ChatbotFloating = () => {
             },
           }}
         >
-          {isExpanded ? <ExpandMore /> : <BotIcon />}
+          {isExpanded ? (
+            <ExpandMore sx={{ fontSize: { xs: 20, sm: 24 } }} />
+          ) : (
+            <BotIcon sx={{ fontSize: { xs: 20, sm: 24 } }} />
+          )}
         </Fab>
       </Tooltip>
     </Box>
